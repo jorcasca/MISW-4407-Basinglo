@@ -1,0 +1,13 @@
+{
+    "sound": "assets/snd/player_shoot.ogg",
+    "size": {
+        "w": 1,
+        "h": 5     
+    },
+    "color": {
+        "r": 255,
+        "g": 128,
+        "b": 0
+    },
+    "velocity": 200
+}
