@@ -23,7 +23,6 @@ from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_enemy_state import system_enemy_state
 from src.ecs.systems.s_collision_bullet_enemy import system_collision_bullet_enemy
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
-
 from src.utils.load_config import load_window, load_level_01, load_enemies, load_player, load_bullet, load_explosion
 
 class GameEngine:

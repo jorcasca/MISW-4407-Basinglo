@@ -78,7 +78,7 @@ def create_enemy_square(ecs_world: esper.World, enemy: dict, enemy_spawn: dict):
          vel = pygame.Vector2(0, 0),
          surface = enemy_sprite
     )
-    ecs_world.add_component(enemy_entity, CTagEnemy())
+    ecs_world.add_component(enemy_entity, CTagEnemy(enemy_spawn["enemy_type"]))
     ecs_world.add_component(enemy_entity, CAnimation(enemy["animations"]))
     ecs_world.add_component(enemy_entity, CEnemyState())
 
