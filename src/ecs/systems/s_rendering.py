@@ -9,4 +9,4 @@ def system_rendering(world:esper.World, screen:pygame.Surface):
     components = world.get_components(CTransform, CSurface)
     for _, (c_t, c_s) in components:
         if c_s.visible:
-            screen.blit(c_s.surf, c_t.pos)
+            screen.blit(c_s.surf, c_t.pos, area=c_s.area)

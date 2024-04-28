@@ -2,7 +2,7 @@ import asyncio
 import pygame
 import esper
 
-from src.create.prefab_creator import create_player_square, create_input_player, create_player_bullet_square, create_player_ammunition_square
+from src.create.prefab_creator import create_player_square, create_input_player, create_player_bullet_square, create_player_ammunition_square, create_enemy_spawner
 
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_velocity import CVelocity
@@ -18,9 +18,10 @@ from src.ecs.systems.s_player_input import system_player_input
 from src.ecs.systems.s_bullet_bounds import system_bullet_bounds
 from src.ecs.systems.s_ammunition import system_ammunition
 from src.ecs.systems.s_ammunition_bounds import system_ammunition_bounds
-
-
-from src.utils.load_config import load_window, load_level_01, load_player, load_bullet
+from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
+from src.ecs.systems.s_animation import system_animation
+from src.ecs.systems.s_enemy_state import system_enemy_state
+from src.utils.load_config import load_window, load_level_01, load_enemies, load_player, load_bullet
 
 class GameEngine:
     def __init__(self) -> None:
@@ -30,6 +31,7 @@ class GameEngine:
     def load_config(self):
         self.window = load_window()
         self.level = load_level_01()
+        self.enemies = load_enemies()
         self.player = load_player()
         self.bullet = load_bullet()
 
@@ -63,6 +65,7 @@ class GameEngine:
         self._player_c_t = self.ecs_world.component_for_entity(self._player_entity, CTransform)
         self._player_c_s = self.ecs_world.component_for_entity(self._player_entity, CSurface)
         create_player_ammunition_square(self.ecs_world, self.bullet, self._player_c_t.pos, self._player_c_s.area.size)
+        create_enemy_spawner(ecs_world=self.ecs_world, enemy_spawn_events=self.level['enemy_spawn_events'])
 
     def _calculate_time(self):
         self.clock.tick(self.window['framerate'])
@@ -98,6 +101,9 @@ class GameEngine:
         system_bullet_bounds(self.ecs_world, self.screen)
         system_ammunition(self.ecs_world)
         system_ammunition_bounds(self.ecs_world)
+        system_enemy_spawner(self.ecs_world, self.delta_time, self.enemies)
+        system_enemy_state(self.ecs_world)
+        system_animation(self.ecs_world, self.delta_time)
         self.ecs_world._clear_dead_entities()
 
     def _draw(self):
