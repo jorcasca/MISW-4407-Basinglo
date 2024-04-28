@@ -14,6 +14,7 @@ from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.ecs.components.tags.c_tag_player_ammunition import CTagPlayerAmmunition
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
+from src.ecs.components.tags.c_tag_explosion import CTagExplosion
 
 from src.engine.service_locator import ServiceLocator
 
@@ -92,3 +93,15 @@ def create_input_player(ecs_world: esper.World):
 def create_enemy_spawner(ecs_world: esper.World, enemy_spawn_events: dict):
     enemy_entity = ecs_world.create_entity()
     ecs_world.add_component(enemy_entity, CEnemySpawner(enemy_spawn_events))
+
+def create_explosion(ecs_world: esper.World, explosion: dict, explosion_pos: pygame.Vector2):
+    explosion_sprite = ServiceLocator.images_service.get(explosion["image"])
+    explosion_entity = create_sprite(
+         ecs_world = ecs_world,
+         pos = explosion_pos,
+         vel = pygame.Vector2(0,0),
+         surface = explosion_sprite
+    )
+    ecs_world.add_component(explosion_entity, CTagExplosion())
+    ecs_world.add_component(explosion_entity, CAnimation(explosion["animations"]))
+    ServiceLocator.sounds_service.play(explosion["sound"])

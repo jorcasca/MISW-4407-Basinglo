@@ -6,7 +6,7 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.tags.c_tag_player_ammunition import CTagPlayerAmmunition
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 
-def system_ammunition_bounds(world:esper.World):
+def system_ammunition_player(world:esper.World):
     ammunition_components = world.get_components(CTransform, CSurface, CTagPlayerAmmunition)
     player_components = world.get_components(CTransform, CSurface, CTagPlayer)
 

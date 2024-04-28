@@ -16,12 +16,15 @@ from src.ecs.systems.s_rendering import system_rendering
 from src.ecs.systems.s_player_bounds import system_player_bounds
 from src.ecs.systems.s_player_input import system_player_input
 from src.ecs.systems.s_bullet_bounds import system_bullet_bounds
-from src.ecs.systems.s_ammunition import system_ammunition
-from src.ecs.systems.s_ammunition_bounds import system_ammunition_bounds
+from src.ecs.systems.s_ammunition_recharge import system_ammunition_recharge
+from src.ecs.systems.s_ammunition_player import system_ammunition_player
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_enemy_state import system_enemy_state
-from src.utils.load_config import load_window, load_level_01, load_enemies, load_player, load_bullet
+from src.ecs.systems.s_collision_bullet_enemy import system_collision_bullet_enemy
+from src.ecs.systems.s_explosion_kill import system_explosion_kill
+
+from src.utils.load_config import load_window, load_level_01, load_enemies, load_player, load_bullet, load_explosion
 
 class GameEngine:
     def __init__(self) -> None:
@@ -34,6 +37,7 @@ class GameEngine:
         self.enemies = load_enemies()
         self.player = load_player()
         self.bullet = load_bullet()
+        self.explosion = load_explosion()
 
     def setup_game(self):
         pygame.init()
@@ -99,10 +103,12 @@ class GameEngine:
         system_movement(self.ecs_world, self.delta_time)
         system_player_bounds(self.ecs_world, self.screen)
         system_bullet_bounds(self.ecs_world, self.screen)
-        system_ammunition(self.ecs_world)
-        system_ammunition_bounds(self.ecs_world)
+        system_ammunition_recharge(self.ecs_world)
+        system_ammunition_player(self.ecs_world)
         system_enemy_spawner(self.ecs_world, self.delta_time, self.enemies)
         system_enemy_state(self.ecs_world)
+        system_collision_bullet_enemy(self.ecs_world, self.explosion['enemy'])
+        system_explosion_kill(self.ecs_world)
         system_animation(self.ecs_world, self.delta_time)
         self.ecs_world._clear_dead_entities()
 

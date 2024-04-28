@@ -20,3 +20,6 @@ def load_player():
 
 def load_bullet():
     return load_json_file('bullet.json')
+
+def load_explosion():
+    return load_json_file('explosion.json')
