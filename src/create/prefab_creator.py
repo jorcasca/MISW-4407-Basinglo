@@ -117,3 +117,15 @@ def create_enemy_bullet_square(ecs_world: esper.World, bullet: dict, enemy_pos: 
     )
     ecs_world.add_component(bullet_entity, CTagEnemyBullet())
     return bullet_entity
+
+def draw_text(ecs_world: esper.World, text: str, font: str, font_size: int, color: dict, position: dict, tag = None):
+        title_entity = ecs_world.create_entity()
+        surface = CSurface.from_text(
+            text=text,
+            font=ServiceLocator.fonts_service.get(font, font_size),
+            color=pygame.Color(color["r"], color["g"], color["b"])
+        )
+        ecs_world.add_component(title_entity, surface)
+        ecs_world.add_component(title_entity, CTransform(pygame.Vector2(position["x"], position["y"])))
+        if tag != None:
+            ecs_world.add_component(title_entity, tag)

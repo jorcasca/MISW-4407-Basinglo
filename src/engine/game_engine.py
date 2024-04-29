@@ -2,7 +2,7 @@ import asyncio
 import pygame
 import esper
 
-from src.create.prefab_creator import create_player_square, create_input_player, create_player_bullet_square, create_player_ammunition_square, create_enemy_spawner
+from src.create.prefab_creator import create_player_square, create_input_player, create_player_bullet_square, create_player_ammunition_square, create_enemy_spawner, draw_text, create_sprite
 
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_velocity import CVelocity
@@ -27,8 +27,9 @@ from src.ecs.systems.s_collision_player_enemy import system_collision_player_ene
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
 from src.ecs.systems.s_enemy_bounds import system_enemy_bounds
 from src.ecs.systems.s_enemy_bullet import system_enemy_bullet
+from src.engine.service_locator import ServiceLocator
 
-from src.utils.load_config import load_window, load_level_01, load_enemies, load_player, load_bullet, load_explosion
+from src.utils.load_config import load_window, load_level_01, load_enemies, load_player, load_bullet, load_explosion, load_interface
 
 class GameEngine:
     def __init__(self) -> None:
@@ -42,6 +43,7 @@ class GameEngine:
         self.player = load_player()
         self.bullet = load_bullet()
         self.explosion = load_explosion()
+        self.interface = load_interface()
 
     def setup_game(self):
         pygame.init()
@@ -67,6 +69,16 @@ class GameEngine:
         self._clean()
 
     def _create(self):
+        draw_text(self.ecs_world, self.interface["1up"]["value"], self.interface["1up"]["font"], self.interface["1up"]["font_size"], self.interface["1up"]["color"], self.interface["1up"]["position"])
+        draw_text(self.ecs_world, self.interface["high_score"]["value"], self.interface["high_score"]["font"], self.interface["high_score"]["font_size"], self.interface["high_score"]["color"], self.interface["high_score"]["position"])
+        draw_text(self.ecs_world, self.interface["score_value"]["value"], self.interface["score_value"]["font"], self.interface["score_value"]["font_size"], self.interface["score_value"]["color"], self.interface["score_value"]["position"])
+        draw_text(self.ecs_world, self.interface["high_score_value"]["value"], self.interface["high_score_value"]["font"], self.interface["high_score_value"]["font_size"], self.interface["high_score_value"]["color"], self.interface["high_score_value"]["position"])
+        draw_text(self.ecs_world, self.interface["level_value"]["value"], self.interface["level_value"]["font"], self.interface["level_value"]["font_size"], self.interface["level_value"]["color"], self.interface["level_value"]["position"])
+        create_sprite(self.ecs_world, pygame.Vector2(self.interface["level_img"]["position"]["x"], self.interface["level_img"]["position"]["y"]), pygame.Vector2(0, 0), ServiceLocator.images_service.get(self.interface["level_img"]["image"]))
+        create_sprite(self.ecs_world, pygame.Vector2(self.interface["life_img"]["position"]["x"], self.interface["life_img"]["position"]["y"]), pygame.Vector2(0, 0), ServiceLocator.images_service.get(self.interface["life_img"]["image"]))
+        create_sprite(self.ecs_world, pygame.Vector2(self.interface["life_img"]["position"]["x"]+10, self.interface["life_img"]["position"]["y"]), pygame.Vector2(0, 0), ServiceLocator.images_service.get(self.interface["life_img"]["image"]))
+        create_sprite(self.ecs_world, pygame.Vector2(self.interface["life_img"]["position"]["x"]+20, self.interface["life_img"]["position"]["y"]), pygame.Vector2(0, 0), ServiceLocator.images_service.get(self.interface["life_img"]["image"]))
+
         create_input_player(self.ecs_world)
         self._player_entity = create_player_square(self.ecs_world, self.player, self.level['player_spawn'])
         self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)

@@ -23,3 +23,6 @@ def load_bullet():
 
 def load_explosion():
     return load_json_file('explosion.json')
+
+def load_interface():
+    return load_json_file('interface.json')

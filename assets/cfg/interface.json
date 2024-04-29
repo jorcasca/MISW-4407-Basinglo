@@ -1,18 +1,86 @@
 {
-    "title_text_color": {
-        "r": 255,
-        "g": 0,
-        "b": 0
+    "1up": {
+        "value": "1UP",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0   
+        },
+        "position": {
+            "x": 20,
+            "y": 5
+        }
     },
-    "normal_text_color": {
-        "r": 255,
-        "g": 255,
-        "b": 255
+    "high_score": {
+        "value": "HI-SCORE",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0   
+        },
+        "position": {
+            "x": 90,
+            "y": 5
+        }
     },
-    "high_score_color": {
-        "r": 30,
-        "g": 144,
-        "b": 255
+    "score_value": {
+        "value": "00",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 30,
+            "g": 144,
+            "b": 255
+        },
+        "position": {
+            "x": 45,
+            "y": 15
+        }
     },
-    "high_score_max_value": 1000
+    "high_score_value": {
+        "value": "5000",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+        },
+        "position": {
+            "x": 115,
+            "y": 15
+        }
+    },
+    "level_img": {
+        "image": "assets/img/invaders_level_flag.png",
+        "position": {
+            "x": 200,
+            "y": 10
+        }
+    },
+    "level_value": {
+        "value": "01",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+        },
+        "position": {
+            "x": 210,
+            "y": 15
+        }
+    },
+    "life_img": {
+        "image": "assets/img/invaders_life.png",
+        "position": {
+            "x": 160,
+            "y": 15
+        }
+    }
 }
