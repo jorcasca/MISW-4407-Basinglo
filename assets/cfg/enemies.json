@@ -1,7 +1,7 @@
 {
     "Enemy01": {
         "image": "assets/img/invaders_enemy_01.png",
-        "sound": "assets/snd/ufo.ogg",
+        "sound": "assets/snd/enemy_launch.ogg",
         "velocity": 75,
         "animations": {
             "number_frames": 5,
@@ -23,7 +23,7 @@
     },
     "Enemy02": {
         "image": "assets/img/invaders_enemy_02.png",
-        "sound": "assets/snd/ufo.ogg",
+        "sound": "assets/snd/enemy_launch.ogg",
         "velocity": 75,
         "animations": {
             "number_frames": 5,
@@ -45,7 +45,7 @@
     },
     "Enemy03": {
         "image": "assets/img/invaders_enemy_03.png",
-        "sound": "assets/snd/ufo.ogg",
+        "sound": "assets/snd/enemy_launch.ogg",
         "velocity": 75,
         "animations": {
             "number_frames": 5,
@@ -67,7 +67,7 @@
     },
     "Enemy04": {
         "image": "assets/img/invaders_enemy_04.png",
-        "sound": "assets/snd/ufo.ogg",
+        "sound": "assets/snd/enemy_launch.ogg",
         "velocity": 75,
         "animations": {
             "number_frames": 1,

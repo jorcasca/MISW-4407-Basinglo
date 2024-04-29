@@ -6,6 +6,7 @@ class CSurface:
         self.surf.fill(color)
         self.area = self.surf.get_rect()
         self.visible = visible
+        self.angle = 0
 
     @classmethod
     def from_surface(cls, surface:pygame.Surface):
@@ -23,3 +24,9 @@ class CSurface:
         new_rect = area.copy()
         new_rect.topleft = pos_topleft.copy()
         return new_rect
+
+    def rotate(self, angle_increment):
+        self.angle += angle_increment
+        if self.angle >= 360:
+            self.angle -= 360
+        self.surf = pygame.transform.rotate(self.surf, angle_increment)
