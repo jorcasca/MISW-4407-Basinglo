@@ -22,9 +22,11 @@ from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_enemy_state import system_enemy_state
 from src.ecs.systems.s_collision_bullet_enemy import system_collision_bullet_enemy
+from src.ecs.systems.s_collision_bullet_player import system_collision_bullet_player
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
 from src.ecs.systems.s_enemy_bounds import system_enemy_bounds
+from src.ecs.systems.s_enemy_bullet import system_enemy_bullet
 
 from src.utils.load_config import load_window, load_level_01, load_enemies, load_player, load_bullet, load_explosion
 
@@ -70,7 +72,7 @@ class GameEngine:
         self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
         self._player_c_t = self.ecs_world.component_for_entity(self._player_entity, CTransform)
         self._player_c_s = self.ecs_world.component_for_entity(self._player_entity, CSurface)
-        create_player_ammunition_square(self.ecs_world, self.bullet, self._player_c_t.pos, self._player_c_s.area.size)
+        create_player_ammunition_square(self.ecs_world, self.bullet["player"], self._player_c_t.pos, self._player_c_s.area.size)
         create_enemy_spawner(ecs_world=self.ecs_world, enemy_spawn_events=self.level['enemy_spawn_events'])
 
     def _calculate_time(self):
@@ -99,7 +101,7 @@ class GameEngine:
                 if c_input.phase == CommandPhase.START:
                     components = self.ecs_world.get_components(CTagPlayerBullet)
                     if len(components) < self.level['player_spawn']['max_bullets']:
-                        create_player_bullet_square(self.ecs_world, self.bullet, self._player_c_t.pos, self._player_c_s.area.size)
+                        create_player_bullet_square(self.ecs_world, self.bullet["player"], self._player_c_t.pos, self._player_c_s.area.size)
 
     def _update(self):
         system_movement(self.ecs_world, self.delta_time)
@@ -110,9 +112,11 @@ class GameEngine:
         system_enemy_spawner(self.ecs_world, self.delta_time, self.enemies)
         system_enemy_state(self.ecs_world, self._player_entity, self.enemies, self.delta_time, self.screen)
         system_collision_bullet_enemy(self.ecs_world, self.explosion['enemy'])
+        system_collision_bullet_player(self.ecs_world, self.level['player_spawn'], self.explosion['player'])
         system_collision_player_enemy(self.ecs_world, self._player_entity, self.level['player_spawn'], self.explosion['player'])
         system_explosion_kill(self.ecs_world)
         system_enemy_bounds(self.ecs_world, self.screen)
+        system_enemy_bullet(self.ecs_world, self.bullet["enemy"], self.delta_time)
         system_animation(self.ecs_world, self.delta_time)
         self.ecs_world._clear_dead_entities()
 

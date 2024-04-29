@@ -15,7 +15,7 @@ from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.ecs.components.tags.c_tag_player_ammunition import CTagPlayerAmmunition
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.ecs.components.tags.c_tag_explosion import CTagExplosion
-
+from src.ecs.components.tags.c_tag_enemy_bullet import CTagEnemyBullet
 from src.engine.service_locator import ServiceLocator
 
 def create_square(ecs_world: esper.World, size:pygame.Vector2, pos:pygame.Vector2, vel: pygame.Vector2, col: pygame.Color) -> int:
@@ -105,3 +105,15 @@ def create_explosion(ecs_world: esper.World, explosion: dict, explosion_pos: pyg
     ecs_world.add_component(explosion_entity, CTagExplosion())
     ecs_world.add_component(explosion_entity, CAnimation(explosion["animations"]))
     ServiceLocator.sounds_service.play(explosion["sound"])
+
+def create_enemy_bullet_square(ecs_world: esper.World, bullet: dict, enemy_pos: pygame.Vector2, enemy_size: pygame.Vector2):
+    bullet_size = pygame.Vector2(bullet["size"]["w"], bullet["size"]["h"])
+    bullet_entity = create_square(
+         ecs_world = ecs_world,
+         size = bullet_size,
+         pos = pygame.Vector2(enemy_pos.x + (enemy_size[0]/2) - (bullet_size[0]/2), enemy_pos.y + (enemy_size[1]/2) - (bullet_size[1]/2)),
+         vel = pygame.Vector2(0, bullet["velocity"]),
+         col = pygame.Color(bullet["color"]["r"], bullet["color"]["g"], bullet["color"]["b"])
+    )
+    ecs_world.add_component(bullet_entity, CTagEnemyBullet())
+    return bullet_entity
