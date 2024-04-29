@@ -8,4 +8,5 @@ class CEnemyState:
 class EnemyState(Enum):
     IDLE_FOWARD = 0
     IDLE_BACKWARD = 1
-    MOVE = 2
+    CHASE = 2
+    RETURN = 3

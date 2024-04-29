@@ -22,7 +22,10 @@ from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_enemy_state import system_enemy_state
 from src.ecs.systems.s_collision_bullet_enemy import system_collision_bullet_enemy
+from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
+from src.ecs.systems.s_enemy_bounds import system_enemy_bounds
+
 from src.utils.load_config import load_window, load_level_01, load_enemies, load_player, load_bullet, load_explosion
 
 class GameEngine:
@@ -105,9 +108,11 @@ class GameEngine:
         system_ammunition_recharge(self.ecs_world)
         system_ammunition_player(self.ecs_world)
         system_enemy_spawner(self.ecs_world, self.delta_time, self.enemies)
-        system_enemy_state(self.ecs_world)
+        system_enemy_state(self.ecs_world, self._player_entity, self.enemies, self.delta_time, self.screen)
         system_collision_bullet_enemy(self.ecs_world, self.explosion['enemy'])
+        system_collision_player_enemy(self.ecs_world, self._player_entity, self.level['player_spawn'], self.explosion['player'])
         system_explosion_kill(self.ecs_world)
+        system_enemy_bounds(self.ecs_world, self.screen)
         system_animation(self.ecs_world, self.delta_time)
         self.ecs_world._clear_dead_entities()
 
