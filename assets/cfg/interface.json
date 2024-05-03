@@ -32,8 +32,8 @@
         "font": "assets/fnt/PressStart2P.ttf",
         "font_size": 8,
         "color": {
-            "r": 30,
-            "g": 144,
+            "r": 255,
+            "g": 255,
             "b": 255
         },
         "position": {
@@ -46,8 +46,8 @@
         "font": "assets/fnt/PressStart2P.ttf",
         "font_size": 8,
         "color": {
-            "r": 255,
-            "g": 255,
+            "r": 30,
+            "g": 144,
             "b": 255
         },
         "position": {
@@ -81,6 +81,57 @@
         "position": {
             "x": 160,
             "y": 15
+        }
+    },
+    "start": {
+        "value": "PRESS Z TO START",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0   
+        },
+        "position": {
+            "x": 65,
+            "y": 150
+        },
+        "blink_rate": 0.5
+    },
+    "logo_title_img": {
+        "image": "assets/img/invaders_logo_title.png",
+        "position": {
+            "x": 55,
+            "y": 50
+        }
+    },
+    "pause": {
+        "value": "PAUSED",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0   
+        },
+        "position": {
+            "x": 110,
+            "y": 150
+        },
+        "blink_rate": 0.5
+    },
+    "level_complete": {
+        "value": "LEVEL COMPLETE",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0   
+        },
+        "position": {
+            "x": 110,
+            "y": 150
         }
     }
 }

@@ -1,6 +1,7 @@
 
 import esper
 import pygame
+import random
 
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
@@ -9,6 +10,7 @@ from src.ecs.components.c_input_command import CInputCommand
 from src.ecs.components.c_enemy_spawner import CEnemySpawner
 from src.ecs.components.c_animation import CAnimation
 from src.ecs.components.c_enemy_state import CEnemyState
+from src.ecs.components.c_blink import CBlink
 
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
@@ -16,6 +18,8 @@ from src.ecs.components.tags.c_tag_player_ammunition import CTagPlayerAmmunition
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.ecs.components.tags.c_tag_explosion import CTagExplosion
 from src.ecs.components.tags.c_tag_enemy_bullet import CTagEnemyBullet
+from src.ecs.components.tags.c_tag_star import CTagStar
+
 from src.engine.service_locator import ServiceLocator
 
 def create_square(ecs_world: esper.World, size:pygame.Vector2, pos:pygame.Vector2, vel: pygame.Vector2, col: pygame.Color) -> int:
@@ -86,9 +90,11 @@ def create_input_player(ecs_world: esper.World):
     input_left = ecs_world.create_entity()
     input_right = ecs_world.create_entity()
     input_key_space = ecs_world.create_entity()
+    pause_action = ecs_world.create_entity()
     ecs_world.add_component(input_left, CInputCommand("PLAYER_LEFT", pygame.K_LEFT))
     ecs_world.add_component(input_right, CInputCommand("PLAYER_RIGHT", pygame.K_RIGHT))
     ecs_world.add_component(input_key_space, CInputCommand("PLAYER_FIRE", pygame.K_SPACE))
+    ecs_world.add_component(pause_action, CInputCommand("PAUSE", pygame.K_p))
 
 def create_enemy_spawner(ecs_world: esper.World, enemy_spawn_events: dict):
     enemy_entity = ecs_world.create_entity()
@@ -118,7 +124,7 @@ def create_enemy_bullet_square(ecs_world: esper.World, bullet: dict, enemy_pos: 
     ecs_world.add_component(bullet_entity, CTagEnemyBullet())
     return bullet_entity
 
-def draw_text(ecs_world: esper.World, text: str, font: str, font_size: int, color: dict, position: dict, tag = None):
+def draw_text(ecs_world: esper.World, text: str, font: str, font_size: int, color: dict, position: dict, tag = None) -> int:
         title_entity = ecs_world.create_entity()
         surface = CSurface.from_text(
             text=text,
@@ -129,3 +135,17 @@ def draw_text(ecs_world: esper.World, text: str, font: str, font_size: int, colo
         ecs_world.add_component(title_entity, CTransform(pygame.Vector2(position["x"], position["y"])))
         if tag != None:
             ecs_world.add_component(title_entity, tag)
+        return title_entity
+
+def create_starfield(ecs_world: esper.World, starfield: dict, screen):
+    for _ in range(starfield["number_of_stars"]):
+        vel = random.randint(starfield["vertical_speed"]["min"], starfield["vertical_speed"]["max"])
+        blink_rate = random.uniform(starfield["blink_rate"]["min"], starfield["blink_rate"]["max"])
+        color = random.choice(starfield["star_colors"])
+        star_entity = create_square(ecs_world, 
+                                    size=pygame.Vector2(starfield["star_size"]["w"], random.randint(starfield["star_size"]["h_min"], starfield["star_size"]["h_max"])),
+                                    pos=pygame.Vector2(random.randint(0, screen.get_width()), random.randint(0, screen.get_height())), 
+                                    vel=pygame.Vector2(0, vel), 
+                                    col=pygame.Color(color["r"], color["g"], color["b"]))
+        ecs_world.add_component(star_entity, CBlink(blink_rate))
+        ecs_world.add_component(star_entity, CTagStar())

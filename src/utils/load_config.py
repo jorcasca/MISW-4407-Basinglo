@@ -12,6 +12,9 @@ def load_window():
 def load_level_01():
     return load_json_file('level_01.json')
 
+def load_level_02():
+    return load_json_file('level_02.json')
+
 def load_enemies():
     return load_json_file('enemies.json')
 
@@ -26,3 +29,6 @@ def load_explosion():
 
 def load_interface():
     return load_json_file('interface.json')
+
+def load_starfield():
+    return load_json_file('starfield.json')

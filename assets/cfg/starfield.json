@@ -16,6 +16,11 @@
             "b": 225
         }
     ],
+    "star_size": {
+        "w": 1,
+        "h_min": 1,
+        "h_max": 2
+    },
     "number_of_stars": 25,
     "vertical_speed": {
         "min": 10,

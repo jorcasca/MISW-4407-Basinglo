@@ -1,6 +1,6 @@
 {
     "settings": {
-        "level": 1, 
+        "level": 2, 
         "sound": "assets/snd/game_start.ogg"
     },
     "player_spawn": {

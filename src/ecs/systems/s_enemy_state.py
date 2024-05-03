@@ -38,15 +38,14 @@ def system_enemy_state(world: esper.World, player_entity: pygame.Vector2, enemy_
 
 
 def _do_idle_foward_state(c_v: CVelocity, c_t:CTransform, c_pst: CEnemyState):
-    c_v.vel.x = 30
+    c_v.vel.x = 15
     if c_t.pos.x - c_t.initial_pos.x > 20:
         c_pst.state = EnemyState.IDLE_BACKWARD
 
 def _do_idle_backward_state(c_v: CVelocity, c_t:CTransform, c_pst: CEnemyState):
-    c_v.vel.x = -30
+    c_v.vel.x = -15
     if c_t.pos.x - c_t.initial_pos.x < -20:
         c_pst.state = EnemyState.IDLE_FOWARD
-
 
 def _do_chase_state(c_s: CSurface, c_t: CTransform, c_pst: CEnemyState, pl_t: CTransform, velocity: int, delta_time: float):
     if pl_t.pos.y - c_t.pos.y < 5:

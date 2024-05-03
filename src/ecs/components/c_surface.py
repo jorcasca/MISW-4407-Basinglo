@@ -30,3 +30,8 @@ class CSurface:
         if self.angle >= 360:
             self.angle -= 360
         self.surf = pygame.transform.rotate(self.surf, angle_increment)
+
+    def toggle_alpha(self):
+        current_alpha = self.surf.get_alpha()
+        new_alpha = 0 if current_alpha == 255 else 255
+        self.surf.set_alpha(new_alpha)
