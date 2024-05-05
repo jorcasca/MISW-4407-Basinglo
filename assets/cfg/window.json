@@ -9,5 +9,6 @@
         "g": 0,
         "b": 0
     },
-    "framerate": 60
+    "framerate": 60,
+    "upward_velocity": 50
 }

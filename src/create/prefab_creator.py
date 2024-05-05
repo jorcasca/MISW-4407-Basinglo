@@ -29,11 +29,13 @@ def create_square(ecs_world: esper.World, size:pygame.Vector2, pos:pygame.Vector
     ecs_world.add_component(cuad_entity, CVelocity(vel))
     return cuad_entity
     
-def create_sprite(ecs_world: esper.World, pos: pygame.Vector2, vel:pygame.Vector2, surface:pygame.Surface) -> int:
+def create_sprite(ecs_world: esper.World, pos: pygame.Vector2, vel:pygame.Vector2, surface:pygame.Surface, *tags) -> int:
     sprite_entity = ecs_world.create_entity()
     ecs_world.add_component(sprite_entity, CTransform(pos))
     ecs_world.add_component(sprite_entity, CVelocity(vel))
     ecs_world.add_component(sprite_entity, CSurface.from_surface(surface))
+    for tag in tags:
+        ecs_world.add_component(sprite_entity, tag)
     return sprite_entity
 
 def create_player_square(ecs_world: esper.World, player: dict, player_spawn: dict) -> int:
@@ -44,7 +46,7 @@ def create_player_square(ecs_world: esper.World, player: dict, player_spawn: dic
          vel = pygame.Vector2(0,0),
          surface = player_sprite
     )
-    ecs_world.add_component(player_entity, CTagPlayer())
+    ecs_world.add_component(player_entity, CTagPlayer(player["lifes"]))
     return player_entity
 
 def create_player_bullet_square(ecs_world: esper.World, bullet: dict, player_pos: pygame.Vector2, player_size: pygame.Vector2):
@@ -82,7 +84,7 @@ def create_enemy_square(ecs_world: esper.World, enemy: dict, enemy_spawn: dict):
          vel = pygame.Vector2(0, 0),
          surface = enemy_sprite
     )
-    ecs_world.add_component(enemy_entity, CTagEnemy(enemy_spawn["enemy_type"]))
+    ecs_world.add_component(enemy_entity, CTagEnemy(enemy_spawn["enemy_type"], enemy["score"]))
     ecs_world.add_component(enemy_entity, CAnimation(enemy["animations"]))
     ecs_world.add_component(enemy_entity, CEnemyState())
 
@@ -95,6 +97,10 @@ def create_input_player(ecs_world: esper.World):
     ecs_world.add_component(input_right, CInputCommand("PLAYER_RIGHT", pygame.K_RIGHT))
     ecs_world.add_component(input_key_space, CInputCommand("PLAYER_FIRE", pygame.K_SPACE))
     ecs_world.add_component(pause_action, CInputCommand("PAUSE", pygame.K_p))
+
+def create_menu_input(ecs_world: esper.World):
+    start_game_action = ecs_world.create_entity()
+    ecs_world.add_component(start_game_action, CInputCommand("START_GAME", pygame.K_z))
 
 def create_enemy_spawner(ecs_world: esper.World, enemy_spawn_events: dict):
     enemy_entity = ecs_world.create_entity()
@@ -124,7 +130,7 @@ def create_enemy_bullet_square(ecs_world: esper.World, bullet: dict, enemy_pos: 
     ecs_world.add_component(bullet_entity, CTagEnemyBullet())
     return bullet_entity
 
-def draw_text(ecs_world: esper.World, text: str, font: str, font_size: int, color: dict, position: dict, tag = None) -> int:
+def draw_text(ecs_world: esper.World, text: str, font: str, font_size: int, color: dict, position: dict, *tags) -> int:
         title_entity = ecs_world.create_entity()
         surface = CSurface.from_text(
             text=text,
@@ -133,7 +139,7 @@ def draw_text(ecs_world: esper.World, text: str, font: str, font_size: int, colo
         )
         ecs_world.add_component(title_entity, surface)
         ecs_world.add_component(title_entity, CTransform(pygame.Vector2(position["x"], position["y"])))
-        if tag != None:
+        for tag in tags:
             ecs_world.add_component(title_entity, tag)
         return title_entity
 

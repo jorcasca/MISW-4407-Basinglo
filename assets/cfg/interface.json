@@ -1,4 +1,7 @@
 {
+    "settings": {
+        "upward_velocity": 40
+    },
     "1up": {
         "value": "1UP",
         "font": "assets/fnt/PressStart2P.ttf",
@@ -63,7 +66,6 @@
         }
     },
     "level_value": {
-        "value": "01",
         "font": "assets/fnt/PressStart2P.ttf",
         "font_size": 8,
         "color": {
@@ -126,12 +128,58 @@
         "font_size": 8,
         "color": {
             "r": 255,
+            "g": 255,
+            "b": 255   
+        },
+        "position": {
+            "x": 70,
+            "y": 150
+        },
+        "lifespan": 3
+    },
+    "next_level": {
+        "value": "GET READY FOR THE NEXT LEVEL",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 255,
             "g": 0,
             "b": 0   
         },
         "position": {
-            "x": 110,
+            "x": 20,
+            "y": 170
+        },
+        "lifespan": 3
+    },
+    "game_start": {
+        "value": "GAME START",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255   
+        },
+        "position": {
+            "x": 90,
             "y": 150
-        }
+        },
+        "lifespan": 3
+    },
+    "game_over": {
+        "value": "GAME OVER",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 8,
+        "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255   
+        },
+        "position": {
+            "x": 90,
+            "y": 150
+        },
+        "lifespan": 3
     }
 }
