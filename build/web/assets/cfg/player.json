@@ -1,0 +1,5 @@
+{
+    "image": "assets/img/invaders_char.png",
+    "input_velocity": 100,
+    "lifes": 3
+}
