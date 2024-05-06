@@ -19,3 +19,4 @@ pip3 install -r requirements.txt
 python3 main.py
 
 # Release on itch.io
+https://masterkr.itch.io/invaders
