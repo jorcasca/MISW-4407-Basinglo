@@ -1,7 +1,8 @@
 {
     "settings": {
         "level": "01", 
-        "sound": "assets/snd/game_start.ogg"
+        "sound": "assets/snd/game_start.ogg",
+        "idle_enemy_velocity": 15
     },
     "player_spawn": {
         "position": {
