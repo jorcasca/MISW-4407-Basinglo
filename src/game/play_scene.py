@@ -11,9 +11,8 @@ from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.c_blink import CBlink
 from src.ecs.components.c_life_span import CLifeSpan
-from src.ecs.components.c_lifes import CLifes
-from src.ecs.components.c_direction import CDirection, PlayerDirection
 
+from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.ecs.components.tags.c_tag_score import CTagScore
 
@@ -27,7 +26,6 @@ from src.ecs.systems.s_ammunition_player import system_ammunition_player
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_enemy_state import system_enemy_state
-from src.ecs.systems.s_enemy_idle import system_enemy_idle
 from src.ecs.systems.s_collision_bullet_enemy import system_collision_bullet_enemy
 from src.ecs.systems.s_collision_bullet_player import system_collision_bullet_player
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
@@ -39,7 +37,6 @@ from src.ecs.systems.s_blink import system_blink
 from src.ecs.systems.s_star_bounds import system_star_bounds
 from src.ecs.systems.s_lifespan import system_lifespan
 from src.ecs.systems.s_player_lifes import system_player_lifes
-from src.ecs.systems.s_player_state import system_player_state
 
 from src.engine.service_locator import ServiceLocator
 
@@ -83,11 +80,10 @@ class PlayScene(Scene):
         self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
         self._player_c_t = self.ecs_world.component_for_entity(self._player_entity, CTransform)
         self._player_c_s = self.ecs_world.component_for_entity(self._player_entity, CSurface)
-        self._player_c_l = self.ecs_world.component_for_entity(self._player_entity, CLifes)
-        self._player_c_d = self.ecs_world.component_for_entity(self._player_entity, CDirection)
+        self._player_c_tg = self.ecs_world.component_for_entity(self._player_entity, CTagPlayer)
 
         create_player_ammunition_square(self.ecs_world, self.bullet["player"], self._player_c_t.pos, self._player_c_s.area.size)
-        create_enemy_spawner(self.ecs_world, self.level['enemy_spawn_events'], self.level['settings']['idle_enemy_velocity'])
+        create_enemy_spawner(ecs_world=self.ecs_world, enemy_spawn_events=self.level['enemy_spawn_events'])
             
         paused_text_ent = draw_text(self.ecs_world, self.interface["pause"]["value"], self.interface["pause"]["font"], self.interface["pause"]["font_size"], self.interface["pause"]["color"], self.interface["pause"]["position"], CBlink(self.interface["start"]["blink_rate"]))
         self.p_txt_s = self.ecs_world.component_for_entity(paused_text_ent, CSurface)
@@ -101,19 +97,17 @@ class PlayScene(Scene):
         system_blink(self.ecs_world, delta_time)
         system_star_bounds(self.ecs_world, self.screen, delta_time)
 
-        if self._player_c_l.lifes == 0:
+        if self._player_c_tg.lifes == 0:
            self._game_over = True
 
         if not self._paused and not self._game_over:
             system_movement(self.ecs_world, delta_time)
-            system_player_state(self.ecs_world, self.player)
             system_player_bounds(self.ecs_world, self.screen)
             system_bullet_bounds(self.ecs_world, self.screen)
             system_ammunition_recharge(self.ecs_world)
             system_ammunition_player(self.ecs_world)
             system_enemy_spawner(self.ecs_world, delta_time, self.enemies)
             system_enemy_state(self.ecs_world, self._player_entity, self.enemies, delta_time, self.screen)
-            system_enemy_idle(self.ecs_world, self.screen)
             system_collision_bullet_enemy(self.ecs_world, self.interface, self.explosion['enemy'])
             system_collision_bullet_player(self.ecs_world, self.level['player_spawn'], self.explosion['player'])
             system_collision_player_enemy(self.ecs_world, self._player_entity, self.level['player_spawn'], self.explosion['player'])
@@ -134,21 +128,21 @@ class PlayScene(Scene):
         if not self._paused:
             if action.name == "PLAYER_LEFT":
                 if action.phase == CommandPhase.START:
-                    self._player_c_d.direction_x = PlayerDirection.LEFT if self._player_c_d.direction_x != PlayerDirection.RIGHT else PlayerDirection.IDLE
+                    self._player_c_v.vel.x -= self.player["input_velocity"]
                 elif action.phase == CommandPhase.END:
-                    self._player_c_d.direction_x = PlayerDirection.RIGHT if self._player_c_d.direction_x == PlayerDirection.IDLE else PlayerDirection.IDLE
-            elif action.name == "PLAYER_RIGHT":
+                    self._player_c_v.vel.x += self.player["input_velocity"]
+            if action.name == "PLAYER_RIGHT":
                 if action.phase == CommandPhase.START:
-                    self._player_c_d.direction_x =  PlayerDirection.RIGHT if self._player_c_d.direction_x != PlayerDirection.LEFT else PlayerDirection.IDLE
+                    self._player_c_v.vel.x += self.player["input_velocity"]
                 elif action.phase == CommandPhase.END:
-                    self._player_c_d.direction_x = PlayerDirection.LEFT if self._player_c_d.direction_x == PlayerDirection.IDLE else PlayerDirection.IDLE
+                    self._player_c_v.vel.x -= self.player["input_velocity"]
             if action.name == "PLAYER_FIRE":
                 if action.phase == CommandPhase.START:
                     components = self.ecs_world.get_components(CTagPlayerBullet)
                     if len(components) < self.level['player_spawn']['max_bullets']:
                         create_player_bullet_square(self.ecs_world, self.bullet["player"], self._player_c_t.pos, self._player_c_s.area.size)
 
-        if action.name == "QUIT_TO_MENU" and action.phase == CommandPhase.START and self._game_over:
+        if action.name == "QUIT_TO_MENU" and action.phase == CommandPhase.START:
             self.switch_scene("MENU_SCENE")
 
         if action.name == "PAUSE" and action.phase == CommandPhase.START:

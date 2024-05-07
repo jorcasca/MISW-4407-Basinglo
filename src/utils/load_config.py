@@ -15,9 +15,6 @@ def load_level_01():
 def load_level_02():
     return load_json_file('level_02.json')
 
-def load_level_03():
-    return load_json_file('level_03.json')
-
 def load_enemies():
     return load_json_file('enemies.json')
 

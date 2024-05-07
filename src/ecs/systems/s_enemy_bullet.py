@@ -22,6 +22,6 @@ def system_enemy_bullet(world: esper.World, bullet: dict, delta_time: float):
                     create_enemy_bullet_square(world, bullet, c_t.pos, c_s.area.size)
             if len(components) > 0:
                 _, (c_t, c_s, c_pst, _) = random.choice(components)
-                if c_pst.state == EnemyState.IDLE:
+                if c_pst.state == EnemyState.IDLE_BACKWARD or c_pst.state == EnemyState.IDLE_FOWARD:
                     create_enemy_bullet_square(world, bullet, c_t.pos, c_s.area.size)
         

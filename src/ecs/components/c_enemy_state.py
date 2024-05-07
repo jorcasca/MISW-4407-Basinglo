@@ -2,11 +2,11 @@ from enum import Enum
 
 class CEnemyState:
     def __init__(self) -> None:
-        self.state = EnemyState.IDLE
+        self.state = EnemyState.IDLE_FOWARD
 
 
 class EnemyState(Enum):
-    IDLE = 0
-    CHASE = 1
-    RETURN = 2
-    ROTATE = 3
+    IDLE_FOWARD = 0
+    IDLE_BACKWARD = 1
+    CHASE = 2
+    RETURN = 3
