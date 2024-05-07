@@ -20,6 +20,11 @@ class CSurface:
         text_surface = font.render(text, True, color)
         return cls.from_surface(text_surface)
 
+    def update_text(self, text: str, font: pygame.font.Font, color: pygame.Color):
+        n_surf = self.from_text(text, font, color)
+        self.surf = n_surf.surf
+        self.area = n_surf.area
+
     def get_area_relative(area: pygame.Rect, pos_topleft: pygame.Vector2):
         new_rect = area.copy()
         new_rect.topleft = pos_topleft.copy()
@@ -27,8 +32,7 @@ class CSurface:
 
     def rotate(self, angle_increment):
         self.angle += angle_increment
-        if self.angle >= 360:
-            self.angle -= 360
+        self.angle %= 360
         self.surf = pygame.transform.rotate(self.surf, angle_increment)
 
     def toggle_alpha(self):

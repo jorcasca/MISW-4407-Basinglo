@@ -11,6 +11,8 @@ from src.ecs.components.c_enemy_spawner import CEnemySpawner
 from src.ecs.components.c_animation import CAnimation
 from src.ecs.components.c_enemy_state import CEnemyState
 from src.ecs.components.c_blink import CBlink
+from src.ecs.components.c_direction import CDirection
+from src.ecs.components.c_lifes import CLifes
 
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
@@ -46,7 +48,10 @@ def create_player_square(ecs_world: esper.World, player: dict, player_spawn: dic
          vel = pygame.Vector2(0,0),
          surface = player_sprite
     )
-    ecs_world.add_component(player_entity, CTagPlayer(player["lifes"]))
+    ecs_world.add_component(player_entity, CTagPlayer())
+    ecs_world.add_component(player_entity, CLifes(player["lifes"]))
+    ecs_world.add_component(player_entity, CDirection())
+
     return player_entity
 
 def create_player_bullet_square(ecs_world: esper.World, bullet: dict, player_pos: pygame.Vector2, player_size: pygame.Vector2):

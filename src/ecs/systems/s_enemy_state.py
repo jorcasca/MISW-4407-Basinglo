@@ -12,6 +12,7 @@ from src.engine.service_locator import ServiceLocator
 
 def system_enemy_state(world: esper.World, player_entity: pygame.Vector2, enemy_spawn: dict, delta_time: float, screen:pygame.Surface):
     pl_t = world.component_for_entity(player_entity, CTransform)
+    pl_s = world.component_for_entity(player_entity, CSurface)
     components = world.get_components(CSurface, CVelocity, CTransform, CAnimation, CEnemyState, CTagEnemy)
     chase_detected = False
 
@@ -24,17 +25,19 @@ def system_enemy_state(world: esper.World, player_entity: pygame.Vector2, enemy_
         if c_pst.state == EnemyState.IDLE_BACKWARD:
             current_state = EnemyState.IDLE_BACKWARD
             _do_idle_backward_state(c_v, c_t, c_pst)
+        if c_pst.state == EnemyState.ROTATE:
+            chase_detected = True
+            _do_rotate_state(c_s, c_t, c_pst, pl_t, pl_s, enemy_spawn[c_t_e.type]["velocity"], delta_time)
         if c_pst.state == EnemyState.CHASE:
             chase_detected = True
-            _do_chase_state(c_s, c_t, c_pst, pl_t, enemy_spawn[c_t_e.type]["velocity"], delta_time)
+            _do_chase_state(c_s, c_t, c_pst, pl_t, pl_s, enemy_spawn[c_t_e.type]["velocity"], delta_time)
         if c_pst.state == EnemyState.RETURN:
             _do_return_state(c_s, c_t, c_pst, enemy_spawn[c_t_e.type]["velocity"], delta_time, screen, current_state)
 
     if len(components) > 0 and not chase_detected:
         _, (_, c_v2, _, _, c_pst2, c_t_e2) = random.choice(components)
         ServiceLocator.sounds_service.play(enemy_spawn[c_t_e2.type]["sound"])
-        c_v2.vel.x = 0
-        c_pst2.state = EnemyState.CHASE
+        c_pst2.state = EnemyState.ROTATE
 
 
 def _do_idle_foward_state(c_v: CVelocity, c_t:CTransform, c_pst: CEnemyState):
@@ -47,13 +50,23 @@ def _do_idle_backward_state(c_v: CVelocity, c_t:CTransform, c_pst: CEnemyState):
     if c_t.pos.x - c_t.initial_pos.x < -20:
         c_pst.state = EnemyState.IDLE_FOWARD
 
-def _do_chase_state(c_s: CSurface, c_t: CTransform, c_pst: CEnemyState, pl_t: CTransform, velocity: int, delta_time: float):
-    if pl_t.pos.y - c_t.pos.y < 5:
-        c_pst.state = EnemyState.RETURN 
-    else:
+
+def _do_rotate_state(c_s: CSurface, c_t: CTransform, c_pst: CEnemyState, pl_t: CTransform, pl_s: CSurface, velocity: int, delta_time: float):
+    direction = pygame.Vector2(pl_t.pos.x + pl_s.area.size[0]/2, - pl_t.pos.y) - c_t.pos
+    _move_towards_target(c_t, direction, velocity, delta_time) 
+    if c_t.pos.y - c_t.initial_pos.y <= -20:
         if c_s.angle < 180: 
             c_s.rotate(180)
-        direction = pl_t.pos - c_t.pos
+        c_pst.state = EnemyState.CHASE
+
+
+
+def _do_chase_state(c_s: CSurface, c_t: CTransform, c_pst: CEnemyState, pl_t: CTransform, pl_s: CSurface, velocity: int, delta_time: float):
+    correct_pl_pos = pygame.Vector2(pl_t.pos.x + pl_s.area.size[0]/2, pl_t.pos.y)
+    if correct_pl_pos.y - c_t.pos.y < 5:
+        c_pst.state = EnemyState.RETURN 
+    else:
+        direction = correct_pl_pos - c_t.pos
         _move_towards_target(c_t, direction, velocity, delta_time)
 
 

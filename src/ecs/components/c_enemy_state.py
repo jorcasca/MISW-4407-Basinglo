@@ -10,3 +10,4 @@ class EnemyState(Enum):
     IDLE_BACKWARD = 1
     CHASE = 2
     RETURN = 3
+    ROTATE = 4

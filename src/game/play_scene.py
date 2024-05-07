@@ -11,6 +11,8 @@ from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.c_blink import CBlink
 from src.ecs.components.c_life_span import CLifeSpan
+from src.ecs.components.c_lifes import CLifes
+from src.ecs.components.c_direction import CDirection, PlayerDirection
 
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
@@ -37,6 +39,7 @@ from src.ecs.systems.s_blink import system_blink
 from src.ecs.systems.s_star_bounds import system_star_bounds
 from src.ecs.systems.s_lifespan import system_lifespan
 from src.ecs.systems.s_player_lifes import system_player_lifes
+from src.ecs.systems.s_player_state import system_player_state
 
 from src.engine.service_locator import ServiceLocator
 
@@ -80,7 +83,8 @@ class PlayScene(Scene):
         self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
         self._player_c_t = self.ecs_world.component_for_entity(self._player_entity, CTransform)
         self._player_c_s = self.ecs_world.component_for_entity(self._player_entity, CSurface)
-        self._player_c_tg = self.ecs_world.component_for_entity(self._player_entity, CTagPlayer)
+        self._player_c_l = self.ecs_world.component_for_entity(self._player_entity, CLifes)
+        self._player_c_d = self.ecs_world.component_for_entity(self._player_entity, CDirection)
 
         create_player_ammunition_square(self.ecs_world, self.bullet["player"], self._player_c_t.pos, self._player_c_s.area.size)
         create_enemy_spawner(ecs_world=self.ecs_world, enemy_spawn_events=self.level['enemy_spawn_events'])
@@ -97,11 +101,12 @@ class PlayScene(Scene):
         system_blink(self.ecs_world, delta_time)
         system_star_bounds(self.ecs_world, self.screen, delta_time)
 
-        if self._player_c_tg.lifes == 0:
+        if self._player_c_l.lifes == 0:
            self._game_over = True
 
         if not self._paused and not self._game_over:
             system_movement(self.ecs_world, delta_time)
+            system_player_state(self.ecs_world, self.player)
             system_player_bounds(self.ecs_world, self.screen)
             system_bullet_bounds(self.ecs_world, self.screen)
             system_ammunition_recharge(self.ecs_world)
@@ -128,14 +133,14 @@ class PlayScene(Scene):
         if not self._paused:
             if action.name == "PLAYER_LEFT":
                 if action.phase == CommandPhase.START:
-                    self._player_c_v.vel.x -= self.player["input_velocity"]
+                    self._player_c_d.direction_x = PlayerDirection.LEFT if self._player_c_d.direction_x != PlayerDirection.RIGHT else PlayerDirection.IDLE
                 elif action.phase == CommandPhase.END:
-                    self._player_c_v.vel.x += self.player["input_velocity"]
-            if action.name == "PLAYER_RIGHT":
+                    self._player_c_d.direction_x = PlayerDirection.RIGHT if self._player_c_d.direction_x == PlayerDirection.IDLE else PlayerDirection.IDLE
+            elif action.name == "PLAYER_RIGHT":
                 if action.phase == CommandPhase.START:
-                    self._player_c_v.vel.x += self.player["input_velocity"]
+                    self._player_c_d.direction_x =  PlayerDirection.RIGHT if self._player_c_d.direction_x != PlayerDirection.LEFT else PlayerDirection.IDLE
                 elif action.phase == CommandPhase.END:
-                    self._player_c_v.vel.x -= self.player["input_velocity"]
+                    self._player_c_d.direction_x = PlayerDirection.LEFT if self._player_c_d.direction_x == PlayerDirection.IDLE else PlayerDirection.IDLE
             if action.name == "PLAYER_FIRE":
                 if action.phase == CommandPhase.START:
                     components = self.ecs_world.get_components(CTagPlayerBullet)
