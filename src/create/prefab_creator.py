@@ -13,6 +13,7 @@ from src.ecs.components.c_enemy_state import CEnemyState
 from src.ecs.components.c_blink import CBlink
 from src.ecs.components.c_direction import CDirection
 from src.ecs.components.c_lifes import CLifes
+from src.ecs.components.c_game_status import CGameStatus
 
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
@@ -162,3 +163,8 @@ def create_starfield(ecs_world: esper.World, starfield: dict, screen):
                                     col=pygame.Color(color["r"], color["g"], color["b"]))
         ecs_world.add_component(star_entity, CBlink(blink_rate))
         ecs_world.add_component(star_entity, CTagStar())
+
+def create_game_status(ecs_world: esper.World) -> int:
+    game_entity = ecs_world.create_entity()
+    ecs_world.add_component(game_entity, CGameStatus())
+    return game_entity
