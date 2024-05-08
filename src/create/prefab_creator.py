@@ -11,6 +11,9 @@ from src.ecs.components.c_enemy_spawner import CEnemySpawner
 from src.ecs.components.c_animation import CAnimation
 from src.ecs.components.c_enemy_state import CEnemyState
 from src.ecs.components.c_blink import CBlink
+from src.ecs.components.c_direction import CDirection
+from src.ecs.components.c_lifes import CLifes
+from src.ecs.components.c_game_status import CGameStatus
 
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
@@ -46,7 +49,10 @@ def create_player_square(ecs_world: esper.World, player: dict, player_spawn: dic
          vel = pygame.Vector2(0,0),
          surface = player_sprite
     )
-    ecs_world.add_component(player_entity, CTagPlayer(player["lifes"]))
+    ecs_world.add_component(player_entity, CTagPlayer())
+    ecs_world.add_component(player_entity, CLifes(player["lifes"]))
+    ecs_world.add_component(player_entity, CDirection())
+
     return player_entity
 
 def create_player_bullet_square(ecs_world: esper.World, bullet: dict, player_pos: pygame.Vector2, player_size: pygame.Vector2):
@@ -93,18 +99,20 @@ def create_input_player(ecs_world: esper.World):
     input_right = ecs_world.create_entity()
     input_key_space = ecs_world.create_entity()
     pause_action = ecs_world.create_entity()
+    quit_action = ecs_world.create_entity()
     ecs_world.add_component(input_left, CInputCommand("PLAYER_LEFT", pygame.K_LEFT))
     ecs_world.add_component(input_right, CInputCommand("PLAYER_RIGHT", pygame.K_RIGHT))
     ecs_world.add_component(input_key_space, CInputCommand("PLAYER_FIRE", pygame.K_SPACE))
     ecs_world.add_component(pause_action, CInputCommand("PAUSE", pygame.K_p))
+    ecs_world.add_component(quit_action, CInputCommand("QUIT_TO_MENU", pygame.K_z))
 
 def create_menu_input(ecs_world: esper.World):
     start_game_action = ecs_world.create_entity()
     ecs_world.add_component(start_game_action, CInputCommand("START_GAME", pygame.K_z))
 
-def create_enemy_spawner(ecs_world: esper.World, enemy_spawn_events: dict):
+def create_enemy_spawner(ecs_world: esper.World, enemy_spawn_events: dict, idle_enemy_velocity: int):
     enemy_entity = ecs_world.create_entity()
-    ecs_world.add_component(enemy_entity, CEnemySpawner(enemy_spawn_events))
+    ecs_world.add_component(enemy_entity, CEnemySpawner(enemy_spawn_events, idle_enemy_velocity))
 
 def create_explosion(ecs_world: esper.World, explosion: dict, explosion_pos: pygame.Vector2):
     explosion_sprite = ServiceLocator.images_service.get(explosion["image"])
@@ -155,3 +163,8 @@ def create_starfield(ecs_world: esper.World, starfield: dict, screen):
                                     col=pygame.Color(color["r"], color["g"], color["b"]))
         ecs_world.add_component(star_entity, CBlink(blink_rate))
         ecs_world.add_component(star_entity, CTagStar())
+
+def create_game_status(ecs_world: esper.World) -> int:
+    game_entity = ecs_world.create_entity()
+    ecs_world.add_component(game_entity, CGameStatus())
+    return game_entity
