@@ -31,3 +31,4 @@ def system_collision_bullet_enemy(world: esper.World, interface: dict, explosion
                         font=ServiceLocator.fonts_service.get(interface["score_value"]["font"], interface["score_value"]["font_size"]),
                         color=pygame.Color(interface["score_value"]["color"]["r"], interface["score_value"]["color"]["g"], interface["score_value"]["color"]["b"])  
                     )
+                    

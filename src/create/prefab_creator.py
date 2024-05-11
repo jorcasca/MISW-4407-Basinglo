@@ -86,11 +86,11 @@ def create_enemy_square(ecs_world: esper.World, enemy: dict, enemy_spawn: dict):
     size = (size[0] / enemy["animations"]["number_frames"], size[1])
     enemy_entity = create_sprite(
          ecs_world = ecs_world,
-         pos = pygame.Vector2(enemy_spawn["position"]["x"] - (size[0]/2), enemy_spawn["position"]["y"] - (size[1]/2)),
+         pos = pygame.Vector2(enemy_spawn.position["x"] - (size[0]/2), enemy_spawn.position["y"] - (size[1]/2)),
          vel = pygame.Vector2(0, 0),
          surface = enemy_sprite
     )
-    ecs_world.add_component(enemy_entity, CTagEnemy(enemy_spawn["enemy_type"], enemy["score"]))
+    ecs_world.add_component(enemy_entity, CTagEnemy(enemy_spawn.enemy_type, enemy["score"]))
     ecs_world.add_component(enemy_entity, CAnimation(enemy["animations"]))
     ecs_world.add_component(enemy_entity, CEnemyState())
 

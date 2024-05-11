@@ -1,6 +1,7 @@
 {
     "Enemy01": {
         "image": "assets/img/invaders_enemy_01.png",
+        "image_pivote": "assets/img/invaders_enemy_01_one.png",
         "sound": "assets/snd/enemy_launch.ogg",
         "score": 40,
         "velocity": 50,
@@ -24,6 +25,7 @@
     },
     "Enemy02": {
         "image": "assets/img/invaders_enemy_02.png",
+        "image_pivote": "assets/img/invaders_enemy_02_one.png",
         "sound": "assets/snd/enemy_launch.ogg",
         "score": 30,
         "velocity": 50,
@@ -47,6 +49,7 @@
     },
     "Enemy03": {
         "image": "assets/img/invaders_enemy_03.png",
+        "image_pivote": "assets/img/invaders_enemy_03_one.png",
         "sound": "assets/snd/enemy_launch.ogg",
         "score": 20,
         "velocity": 50,
@@ -70,6 +73,7 @@
     },
     "Enemy04": {
         "image": "assets/img/invaders_enemy_04.png",
+        "image_pivote": "assets/img/invaders_enemy_04_one.png",
         "sound": "assets/snd/enemy_launch.ogg",
         "velocity": 50,
         "score": 10,

@@ -30,10 +30,18 @@ class CSurface:
         new_rect.topleft = pos_topleft.copy()
         return new_rect
 
-    def rotate(self, angle_increment):
+    def rotate(self, pivote_image, angle_increment):
         self.angle += angle_increment
-        self.angle %= 360
-        self.surf = pygame.transform.rotate(self.surf, angle_increment)
+        self.surf = pygame.transform.rotate(pivote_image, self.angle)
+        self.area = self.surf.get_rect()
+
+    def rotate_to_180(self, spride_image):
+        self.angle = 180
+        self.surf = pygame.transform.rotate(spride_image, self.angle)
+
+    def rotate_to_0(self, spride_image):
+        self.angle = 0
+        self.surf = pygame.transform.rotate(spride_image, self.angle)
 
     def toggle_alpha(self):
         current_alpha = self.surf.get_alpha()

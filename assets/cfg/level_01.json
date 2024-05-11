@@ -32,7 +32,7 @@
 
 
         {
-            "time": 0.0,
+            "time": 0.1,
             "enemy_type": "Enemy03",
             "position": {
                 "x": 96,
@@ -40,7 +40,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.1,
             "enemy_type": "Enemy03",
             "position": {
                 "x": 112,
@@ -48,7 +48,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.1,
             "enemy_type": "Enemy03",
             "position": {
                 "x": 128,
@@ -56,7 +56,7 @@
             }
         },        
         {
-            "time": 0.0,
+            "time": 0.1,
             "enemy_type": "Enemy03",
             "position": {
                 "x": 144,
@@ -64,7 +64,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.1,
             "enemy_type": "Enemy03",
             "position": {
                 "x": 160,
@@ -72,7 +72,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.1,
             "enemy_type": "Enemy03",
             "position": {
                 "x": 176,
@@ -85,64 +85,64 @@
 
 
         {
-            "time": 0.0,
-            "enemy_type": "Enemy02",
+            "time": 0.2,
+            "enemy_type": "Enemy03",
             "position": {
                 "x": 80,
                 "y": 70
             }
         },
         {
-            "time": 0.0,
-            "enemy_type": "Enemy02",
+            "time": 0.2,
+            "enemy_type": "Enemy03",
             "position": {
                 "x": 96,
                 "y": 70
             }
         },
         {
-            "time": 0.0,
-            "enemy_type": "Enemy02",
+            "time": 0.2,
+            "enemy_type": "Enemy03",
             "position": {
                 "x": 112,
                 "y": 70
             }
         },
         {
-            "time": 0.0,
-            "enemy_type": "Enemy02",
+            "time": 0.2,
+            "enemy_type": "Enemy03",
             "position": {
                 "x": 128,
                 "y": 70
             }
         },
         {
-            "time": 0.0,
-            "enemy_type": "Enemy02",
+            "time": 0.2,
+            "enemy_type": "Enemy03",
             "position": {
                 "x": 144,
                 "y": 70
             }
         },
         {
-            "time": 0.0,
-            "enemy_type": "Enemy02",
+            "time": 0.2,
+            "enemy_type": "Enemy03",
             "position": {
                 "x": 160,
                 "y": 70
             }
         },
         {
-            "time": 0.0,
-            "enemy_type": "Enemy02",
+            "time": 0.2,
+            "enemy_type": "Enemy03",
             "position": {
                 "x": 176,
                 "y": 70
             }
         },
         {
-            "time": 0.0,
-            "enemy_type": "Enemy02",
+            "time": 0.2,
+            "enemy_type": "Enemy03",
             "position": {
                 "x": 192,
                 "y": 70
@@ -154,7 +154,7 @@
 
 
         {
-            "time": 0.0,
+            "time": 0.3,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 64,
@@ -162,7 +162,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.3,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 80,
@@ -170,7 +170,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.3,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 96,
@@ -178,7 +178,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.3,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 112,
@@ -186,7 +186,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.3,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 128,
@@ -194,7 +194,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.3,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 144,
@@ -202,7 +202,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.3,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 160,
@@ -210,7 +210,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.3,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 176,
@@ -218,7 +218,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.3,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 192,
@@ -226,7 +226,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.3,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 208,
@@ -235,7 +235,7 @@
         },
 
         {
-            "time": 0.0,
+            "time": 0.4,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 64,
@@ -243,7 +243,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.4,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 80,
@@ -251,7 +251,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.4,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 96,
@@ -259,7 +259,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.4,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 112,
@@ -267,7 +267,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.4,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 128,
@@ -275,7 +275,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.4,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 144,
@@ -283,7 +283,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.4,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 160,
@@ -291,7 +291,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.4,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 176,
@@ -299,7 +299,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.4,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 192,
@@ -307,7 +307,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.4,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 208,
@@ -316,7 +316,7 @@
         },
 
         {
-            "time": 0.0,
+            "time": 0.5,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 64,
@@ -324,7 +324,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.5,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 80,
@@ -332,7 +332,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.5,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 96,
@@ -340,7 +340,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.5,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 112,
@@ -348,7 +348,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.5,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 128,
@@ -356,7 +356,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.5,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 144,
@@ -364,7 +364,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.5,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 160,
@@ -372,7 +372,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.5,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 176,
@@ -380,7 +380,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.5,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 192,
@@ -388,7 +388,7 @@
             }
         },
         {
-            "time": 0.0,
+            "time": 0.5,
             "enemy_type": "Enemy01",
             "position": {
                 "x": 208,
