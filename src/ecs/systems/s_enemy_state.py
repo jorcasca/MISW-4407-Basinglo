@@ -33,9 +33,13 @@ def system_enemy_state(world: esper.World, player_entity: pygame.Vector2, enemy_
 
     if len(components) > 0 and pl_s.visible and not chase_detected:
         _, (_, c_v2, _, _, c_pst2, c_t_e2) = random.choice(components)
-        c_v2.vel.x = 0
+
         ServiceLocator.sounds_service.play(enemy_spawn[c_t_e2.type]["sound"])
         c_pst2.state = EnemyState.ROTATE
+
+        if (random.random()*(len(enemy_spawn) / len(components))) > 0.1 and len(components) > 1: 
+            _, (_, c_v3, _, _, c_pst3, c_t_e3) = random.choice(components)
+            c_pst3.state = EnemyState.ROTATE
 
 
 def _do_idle_state():
