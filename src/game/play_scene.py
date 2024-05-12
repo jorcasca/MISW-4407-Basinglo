@@ -120,7 +120,7 @@ class PlayScene(Scene):
             system_collision_bullet_player(self.ecs_world, self.explosion['player'], self._game_entity)
             system_collision_player_enemy(self.ecs_world, self._player_entity, self._game_entity, self.explosion['player'])
             system_enemy_bounds(self.ecs_world, self.screen)
-            system_enemy_bullet(self.ecs_world, self.bullet["enemy"], delta_time)
+            system_enemy_bullet(self.ecs_world, self.bullet["enemy"], self._player_entity, delta_time)
             system_lifespan(self.ecs_world, delta_time)
             system_player_lifes(self.ecs_world, self._lf1_entity, self._lf2_entity, self._lf3_entity, self._game_entity)
             

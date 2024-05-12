@@ -9,7 +9,8 @@ from src.ecs.components.c_enemy_spawner import CEnemySpawner
 
 from src.create.prefab_creator import create_enemy_bullet_square
 
-def system_enemy_bullet(world: esper.World, bullet: dict, delta_time: float):
+def system_enemy_bullet(world: esper.World, bullet: dict, player_entity: int, delta_time: float):
+    pl_s = world.component_for_entity(player_entity, CSurface)
     components = world.get_components(CTransform, CSurface, CEnemyState, CTagEnemy)
     enemy_spawner_component = world.get_component(CEnemySpawner)
 
@@ -18,10 +19,10 @@ def system_enemy_bullet(world: esper.World, bullet: dict, delta_time: float):
         if c_s.spawn_timer >= 3:
             c_s.spawn_timer = 0
             for _, (c_t, c_s, c_pst, _) in components:
-                if c_pst.state == EnemyState.CHASE:
+                if c_pst.state == EnemyState.CHASE and pl_s.visible == True:
                     create_enemy_bullet_square(world, bullet, c_t.pos, c_s.area.size)
             if len(components) > 0:
                 _, (c_t, c_s, c_pst, _) = random.choice(components)
-                if c_pst.state == EnemyState.IDLE:
+                if c_pst.state == EnemyState.IDLE and pl_s.visible == True:
                     create_enemy_bullet_square(world, bullet, c_t.pos, c_s.area.size)
         

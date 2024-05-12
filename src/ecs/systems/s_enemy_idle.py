@@ -19,7 +19,6 @@ def system_enemy_idle(world: esper.World, screen:pygame.Surface):
     enemy_components = world.get_components(CTransform, CVelocity, CSurface, CEnemyState, CTagEnemy)
 
     for _, c_e_s in world.get_component(CEnemySpawner):
-
         first = False
         for _, (c_t, c_v, c_s, c_pst, _) in enemy_components:
             if c_pst.state == EnemyState.IDLE:
