@@ -106,7 +106,7 @@ class PlayScene(Scene):
             system_movement(self.ecs_world, delta_time)
             system_enemy_idle(self.ecs_world, self.screen)
             if self._game_c_s.status == GameStatus.START or self._game_c_s.status == GameStatus.PLAYER_RESTART or self._game_c_s.status == GameStatus.SHOW_GAME_OVER or self._game_c_s.status == GameStatus.GAME_OVER:
-                system_enemy_state(self.ecs_world, self._player_entity, self.enemies, delta_time, self.screen)
+                system_enemy_state(self.ecs_world, self._player_entity, self.enemies, self.level, delta_time, self.screen)
 
         if self._game_c_s.status != GameStatus.PAUSE and self._game_c_s.status != GameStatus.GAME_OVER:
             system_game_status(self.ecs_world, self.level, self.level['player_spawn'], self.interface, delta_time)
@@ -125,7 +125,7 @@ class PlayScene(Scene):
             system_player_lifes(self.ecs_world, self._lf1_entity, self._lf2_entity, self._lf3_entity, self._game_entity)
             
             if self._game_c_s.status == GameStatus.START:
-                system_win_level(self.ecs_world, self)
+                system_win_level(self.ecs_world, self.level, self._game_entity, self)
 
         system_animation(self.ecs_world, delta_time)
 
@@ -152,8 +152,13 @@ class PlayScene(Scene):
                     if len(components) < self.level['player_spawn']['max_bullets']:
                         create_player_bullet_square(self.ecs_world, self.bullet["player"], self._player_c_t.pos, self._player_c_s.area.size)
 
-        if action.name == "QUIT_TO_MENU" and action.phase == CommandPhase.START and self._game_c_s.status == GameStatus.GAME_OVER:
-            self.switch_scene("MENU_SCENE")
+            if action.name == "QUIT_TO_MENU_AND_PLAYER_FIRE" and action.phase == CommandPhase.START:
+                    if self._game_c_s.status == GameStatus.START:
+                        components = self.ecs_world.get_components(CTagPlayerBullet)
+                        if len(components) < self.level['player_spawn']['max_bullets']:
+                            create_player_bullet_square(self.ecs_world, self.bullet["player"], self._player_c_t.pos, self._player_c_s.area.size)
+                    elif self._game_c_s.status == GameStatus.GAME_OVER:
+                        self.switch_scene("MENU_SCENE")
 
         if action.name == "PAUSE" and action.phase == CommandPhase.START and self._game_c_s.status != GameStatus.GAME_OVER:
             if(self._game_c_s.status == GameStatus.PAUSE):
