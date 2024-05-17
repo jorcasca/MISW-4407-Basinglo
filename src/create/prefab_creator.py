@@ -104,7 +104,7 @@ def create_input_player(ecs_world: esper.World):
     ecs_world.add_component(input_right, CInputCommand("PLAYER_RIGHT", pygame.K_RIGHT))
     ecs_world.add_component(input_key_space, CInputCommand("PLAYER_FIRE", pygame.K_SPACE))
     ecs_world.add_component(pause_action, CInputCommand("PAUSE", pygame.K_p))
-    ecs_world.add_component(quit_action, CInputCommand("QUIT_TO_MENU", pygame.K_z))
+    ecs_world.add_component(quit_action, CInputCommand("QUIT_TO_MENU_AND_PLAYER_FIRE", pygame.K_z))
 
 def create_menu_input(ecs_world: esper.World):
     start_game_action = ecs_world.create_entity()

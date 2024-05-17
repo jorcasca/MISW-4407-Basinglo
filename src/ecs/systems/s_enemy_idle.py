@@ -19,14 +19,11 @@ def system_enemy_idle(world: esper.World, screen:pygame.Surface):
     enemy_components = world.get_components(CTransform, CVelocity, CSurface, CEnemyState, CTagEnemy)
 
     for _, c_e_s in world.get_component(CEnemySpawner):
-        first = False
         for _, (c_t, c_v, c_s, c_pst, _) in enemy_components:
             if c_pst.state == EnemyState.IDLE:
                 start_e = min(start_e, c_t.pos.x + c_s.area.size[0]/2)
                 end_e = max(end_e, c_t.pos.x + c_s.area.size[0]/2)
-                if first == False:
-                    c_e_s.idle_base_position = c_t.pos.x - c_t.initial_pos.x
-                    first = True
+                c_e_s.idle_base_position = c_t.pos.x - c_t.initial_pos.x
 
         if start_e < left_wall or end_e > right_wall:
             c_e_s.idle_enemy_velocity *= -1

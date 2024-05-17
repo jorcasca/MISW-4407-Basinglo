@@ -7,7 +7,7 @@ from src.game.play_scene import PlayScene
 
 from src.ecs.components.c_input_command import CInputCommand
 
-from src.utils.load_config import load_window, load_level_01, load_level_02
+from src.utils.load_config import load_window, load_level_01, load_level_02, load_level_03, load_level_04, load_level_05
 
 class GameEngine:
     def __init__(self) -> None:
@@ -18,6 +18,9 @@ class GameEngine:
         self.window = load_window()
         self.level_01 = load_level_01()
         self.level_02 = load_level_02()
+        self.level_03 = load_level_03()
+        self.level_04 = load_level_04()
+        self.level_05 = load_level_05()
 
     def setup_game(self):
         pygame.init()
@@ -30,6 +33,9 @@ class GameEngine:
         self._scenes["MENU_SCENE"] = MenuScene(self)
         self._scenes["LEVEL_01"] = PlayScene(self.level_01, self)
         self._scenes["LEVEL_02"] = PlayScene(self.level_02, self)
+        self._scenes["LEVEL_03"] = PlayScene(self.level_03, self)
+        self._scenes["LEVEL_04"] = PlayScene(self.level_04, self)
+        self._scenes["LEVEL_05"] = PlayScene(self.level_05, self)
         self._current_scene:Scene = None
         self._scene_name_to_switch:str = None
 

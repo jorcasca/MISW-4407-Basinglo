@@ -11,17 +11,17 @@ from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.engine.service_locator import ServiceLocator
 from src.ecs.components.c_enemy_spawner import CEnemySpawner
 
-def system_enemy_state(world: esper.World, player_entity: pygame.Vector2, enemy_spawn: dict, delta_time: float, screen:pygame.Surface):
+def system_enemy_state(world: esper.World, player_entity: pygame.Vector2, enemy_spawn: dict, level: dict, delta_time: float, screen:pygame.Surface):
     pl_t = world.component_for_entity(player_entity, CTransform)
     pl_s = world.component_for_entity(player_entity, CSurface)
     components = world.get_components(CSurface, CVelocity, CTransform, CAnimation, CEnemyState, CTagEnemy)
 
     chase_detected = False
 
-    for _, (c_s, c_v, c_t, c_a, c_pst, c_t_e) in components:
+    for _, (c_s, _, c_t, c_a, c_pst, c_t_e) in components:
         _set_animation(c_a, 1)
         if c_pst.state == EnemyState.IDLE:
-            _do_idle_state()
+            _do_idle_state(c_s)
         if c_pst.state == EnemyState.ROTATE:
             chase_detected = True
             _do_rotate_state(c_a, c_s, c_t, c_pst, pl_t, pl_s, enemy_spawn[c_t_e.type]["velocity"], enemy_spawn[c_t_e.type]["image"], enemy_spawn[c_t_e.type]["image_pivote"], delta_time)
@@ -37,14 +37,14 @@ def system_enemy_state(world: esper.World, player_entity: pygame.Vector2, enemy_
         ServiceLocator.sounds_service.play(enemy_spawn[c_t_e2.type]["sound"])
         c_pst2.state = EnemyState.ROTATE
 
-        if (random.random()*(len(enemy_spawn) / len(components))) > 0.1 and len(components) > 1: 
-            _, (_, c_v3, _, _, c_pst3, c_t_e3) = random.choice(components)
+        if len(components) > 1 and (random.random()*(len(enemy_spawn) / len(components))*int(level["settings"]["level"])) > 0.1: 
+            _, (_, c_v3, _, _, c_pst3, _) = random.choice(components)
             c_v3.vel.x = 0
             c_pst3.state = EnemyState.ROTATE
 
 
-def _do_idle_state():
-    pass
+def _do_idle_state(c_s: CSurface):
+    c_s.angle = 0
 
 def _do_rotate_state(c_a: CAnimation, c_s: CSurface, c_t: CTransform, c_pst: CEnemyState, pl_t: CTransform, pl_s: CSurface, velocity: int, spride: str, image_pivote: str, delta_time: float):
     direction = pygame.Vector2(pl_t.pos.x + pl_s.area.size[0]/2, - pl_t.pos.y) - c_t.pos
