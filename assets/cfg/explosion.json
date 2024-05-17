@@ -14,6 +14,21 @@
             ]
         }
     },
+    "bullet": {
+        "sound": "assets/snd/bullet_die.ogg",
+        "image": "assets/img/invaders_bullet_explosion.png",
+        "animations": {
+            "number_frames": 8,
+            "list": [
+                {
+                    "name": "EXPLODE",
+                    "start": 0,
+                    "end": 7,
+                    "framerate": 16
+                }
+            ]
+        }
+    },
     "player": {
         "sound": "assets/snd/player_die.ogg",
         "image": "assets/img/invaders_player_explosion.png",

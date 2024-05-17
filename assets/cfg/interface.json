@@ -181,5 +181,38 @@
             "y": 150
         },
         "lifespan": 3
+    },
+    "power_title": {
+        "value": "ESCUDO X",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 5,
+        "position": {
+            "x": 5,
+            "y": 230
+        },
+        "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+        }
+    },
+    "power_value": {
+        "value": "100%",
+        "font": "assets/fnt/PressStart2P.ttf",
+        "font_size": 5,
+        "position": {
+            "x": 50,
+            "y": 230
+        },
+        "color_deactivated": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+        },
+        "color_activated": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+        }
     }
 }
