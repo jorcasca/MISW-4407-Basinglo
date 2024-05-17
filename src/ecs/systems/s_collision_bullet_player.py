@@ -26,4 +26,4 @@ def system_collision_bullet_player(world: esper.World, explosion: dict, game_sta
                 c_d_p.direction_x = PlayerDirection.IDLE
                 g_s = world.component_for_entity(game_status, CGameStatus)
                 g_s.status = GameStatus.PLAYER_RESTART
-                g_s.timer = 3
+                g_s.timer = 4

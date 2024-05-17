@@ -28,4 +28,4 @@ def system_collision_player_enemy(world: esper.World, player_entity: int, game_s
             pl_d.direction_x = PlayerDirection.IDLE
             g_s = world.component_for_entity(game_status, CGameStatus)
             g_s.status = GameStatus.PLAYER_RESTART
-            g_s.timer = 3
+            g_s.timer = 4
