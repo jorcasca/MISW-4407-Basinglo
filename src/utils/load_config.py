@@ -41,3 +41,6 @@ def load_interface():
 
 def load_starfield():
     return load_json_file('starfield.json')
+
+def load_shield():
+    return load_json_file('shield.json')

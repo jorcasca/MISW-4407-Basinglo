@@ -2,7 +2,7 @@ import pygame
 
 import src.engine.game_engine
 
-from src.create.prefab_creator import create_player_square, create_input_player, create_player_bullet_square, create_player_ammunition_square, draw_text, create_sprite, create_starfield, create_game_status
+from src.create.prefab_creator import create_player_square, create_input_player, create_player_bullet_square, create_player_ammunition_square, draw_text, create_sprite, create_starfield, create_game_status, create_player_shield
 
 from src.engine.scenes.scene import Scene
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
@@ -14,11 +14,13 @@ from src.ecs.components.c_life_span import CLifeSpan
 from src.ecs.components.c_lifes import CLifes
 from src.ecs.components.c_direction import CDirection, PlayerDirection
 from src.ecs.components.c_game_status import CGameStatus, GameStatus
+from src.ecs.components.c_player_power import CPlayerPower
+from src.ecs.components.tags.c_tag_power import CTagPower
 
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.ecs.components.tags.c_tag_score import CTagScore
 
-from src.utils.load_config import load_window, load_enemies, load_player, load_bullet, load_explosion, load_interface, load_starfield
+from src.utils.load_config import load_window, load_enemies, load_player, load_bullet, load_explosion, load_interface, load_starfield, load_shield
 
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_player_bounds import system_player_bounds
@@ -32,6 +34,8 @@ from src.ecs.systems.s_enemy_idle import system_enemy_idle
 from src.ecs.systems.s_collision_bullet_enemy import system_collision_bullet_enemy
 from src.ecs.systems.s_collision_bullet_player import system_collision_bullet_player
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
+from src.ecs.systems.s_collision_shield_enemy import system_collision_shield_enemy
+from src.ecs.systems.s_collision_shield_bullet import system_collision_shield_bullet
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
 from src.ecs.systems.s_enemy_bounds import system_enemy_bounds
 from src.ecs.systems.s_enemy_bullet import system_enemy_bullet
@@ -42,6 +46,9 @@ from src.ecs.systems.s_lifespan import system_lifespan
 from src.ecs.systems.s_player_lifes import system_player_lifes
 from src.ecs.systems.s_player_state import system_player_state
 from src.ecs.systems.s_game_status import system_game_status
+from src.ecs.systems.s_collision_bullet import system_collision_bullet
+from src.ecs.systems.s_player_power_recharge import system_player_power_recharge
+from src.ecs.systems.s_shield_player import system_shield_player
 from src.engine.service_locator import ServiceLocator
 
 class PlayScene(Scene):
@@ -58,6 +65,7 @@ class PlayScene(Scene):
         self.explosion = load_explosion()
         self.interface = load_interface()
         self.starfield = load_starfield()
+        self.shield = load_shield()
 
     def do_create(self):
         ServiceLocator.sounds_service.play(self.level["settings"]["sound"])
@@ -70,7 +78,9 @@ class PlayScene(Scene):
         draw_text(self.ecs_world, "00", self.interface["score_value"]["font"], self.interface["score_value"]["font_size"], self.interface["score_value"]["color"], self.interface["score_value"]["position"], CTagScore())
         draw_text(self.ecs_world, self.interface["high_score_value"]["value"], self.interface["high_score_value"]["font"], self.interface["high_score_value"]["font_size"], self.interface["high_score_value"]["color"], self.interface["high_score_value"]["position"])
         draw_text(self.ecs_world, self.level["settings"]["level"], self.interface["level_value"]["font"], self.interface["level_value"]["font_size"], self.interface["level_value"]["color"], self.interface["level_value"]["position"])
-        
+        draw_text(self.ecs_world, self.interface["power_title"]["value"], self.interface["power_title"]["font"], self.interface["power_title"]["font_size"], self.interface["power_title"]["color"], self.interface["power_title"]["position"])
+        draw_text(self.ecs_world, self.interface["power_value"]["value"], self.interface["power_value"]["font"], self.interface["power_value"]["font_size"], self.interface["power_value"]["color_activated"], self.interface["power_value"]["position"], CTagPower())
+
         if self.level["settings"]["level"] == "01":
             draw_text(self.ecs_world, self.interface["game_start"]["value"], self.interface["game_start"]["font"], self.interface["game_start"]["font_size"], self.interface["game_start"]["color"], self.interface["game_start"]["position"], CLifeSpan(self.interface["game_start"]["lifespan"]))
         elif self.level["settings"]["level"] == "02":
@@ -87,6 +97,7 @@ class PlayScene(Scene):
         self._player_c_s = self.ecs_world.component_for_entity(self._player_entity, CSurface)
         self._player_c_l = self.ecs_world.component_for_entity(self._player_entity, CLifes)
         self._player_c_d = self.ecs_world.component_for_entity(self._player_entity, CDirection)
+        self._player_c_p = self.ecs_world.component_for_entity(self._player_entity, CPlayerPower)
 
         create_player_ammunition_square(self.ecs_world, self.bullet["player"], self._player_c_t.pos, self._player_c_s.area.size)
             
@@ -115,15 +126,20 @@ class PlayScene(Scene):
             system_bullet_bounds(self.ecs_world, self.screen)
             system_ammunition_recharge(self.ecs_world)
             system_ammunition_player(self.ecs_world)
-            system_enemy_spawner(self.ecs_world, delta_time, self.enemies)            
+            system_enemy_spawner(self.ecs_world, delta_time, self.enemies)
+            system_collision_bullet(self.ecs_world, self.explosion['bullet'])            
             system_collision_bullet_enemy(self.ecs_world, self.interface, self.explosion['enemy'])
+            system_collision_shield_enemy(self.ecs_world, self.explosion['enemy'])
+            system_collision_shield_bullet(self.ecs_world, self.explosion['bullet'])
             system_collision_bullet_player(self.ecs_world, self.explosion['player'], self._game_entity)
             system_collision_player_enemy(self.ecs_world, self._player_entity, self._game_entity, self.explosion['player'])
             system_enemy_bounds(self.ecs_world, self.screen)
             system_enemy_bullet(self.ecs_world, self.bullet["enemy"], self._player_entity, delta_time)
             system_lifespan(self.ecs_world, delta_time)
             system_player_lifes(self.ecs_world, self._lf1_entity, self._lf2_entity, self._lf3_entity, self._game_entity)
-            
+            system_player_power_recharge(self.ecs_world, self.interface, delta_time)
+            system_shield_player(self.ecs_world)
+
             if self._game_c_s.status == GameStatus.START:
                 system_win_level(self.ecs_world, self.level, self._game_entity, self)
 
@@ -151,6 +167,12 @@ class PlayScene(Scene):
                     components = self.ecs_world.get_components(CTagPlayerBullet)
                     if len(components) < self.level['player_spawn']['max_bullets']:
                         create_player_bullet_square(self.ecs_world, self.bullet["player"], self._player_c_t.pos, self._player_c_s.area.size)
+
+            if action.name == "PLAYER_SHIELD" and action.phase == CommandPhase.START and self._game_c_s.status == GameStatus.START:
+                if self._player_c_p.current_power == 100:
+                    create_player_shield(self.ecs_world, self._player_c_t.pos, self._player_c_s.area.size, self.shield)
+                    self._player_c_p.current_power = 0
+                    self._player_c_p.elapsed_time = 0
 
             if action.name == "QUIT_TO_MENU_AND_PLAYER_FIRE" and action.phase == CommandPhase.START:
                     if self._game_c_s.status == GameStatus.START:

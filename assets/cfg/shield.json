@@ -1,0 +1,16 @@
+{
+    "image": "assets/img/invaders_shield.png",
+    "lifespan": 3,
+    "sound": "assets/snd/player_shield.ogg",
+    "animations": {
+        "number_frames": 4,
+        "list": [
+            {
+                "name": "EXPLODE",
+                "start": 0,
+                "end": 3,
+                "framerate": 5
+            }
+        ]
+    }
+}

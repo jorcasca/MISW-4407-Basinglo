@@ -14,6 +14,8 @@ from src.ecs.components.c_blink import CBlink
 from src.ecs.components.c_direction import CDirection
 from src.ecs.components.c_lifes import CLifes
 from src.ecs.components.c_game_status import CGameStatus
+from src.ecs.components.c_life_span import CLifeSpan
+from src.ecs.components.c_player_power import CPlayerPower
 
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
@@ -22,6 +24,7 @@ from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.ecs.components.tags.c_tag_explosion import CTagExplosion
 from src.ecs.components.tags.c_tag_enemy_bullet import CTagEnemyBullet
 from src.ecs.components.tags.c_tag_star import CTagStar
+from src.ecs.components.tags.c_tag_shield import CTagShield
 
 from src.engine.service_locator import ServiceLocator
 
@@ -52,8 +55,22 @@ def create_player_square(ecs_world: esper.World, player: dict, player_spawn: dic
     ecs_world.add_component(player_entity, CTagPlayer())
     ecs_world.add_component(player_entity, CLifes(player["lifes"]))
     ecs_world.add_component(player_entity, CDirection())
-
+    ecs_world.add_component(player_entity, CPlayerPower(player["shield_recharge_duration"]))
     return player_entity
+
+def create_player_shield(ecs_world: esper.World, player_pos: pygame.Vector2, player_size: pygame.Vector2, shield: dict) -> int:
+    shield_sprite = ServiceLocator.images_service.get(shield["image"])
+    shield_entity = create_sprite(
+         ecs_world = ecs_world,
+         pos = pygame.Vector2(player_pos.x - (player_size[0]), player_pos.y - player_size[1]),
+         vel = pygame.Vector2(0,0),
+         surface = shield_sprite
+    )
+    ecs_world.add_component(shield_entity, CAnimation(shield["animations"]))
+    ecs_world.add_component(shield_entity, CLifeSpan(shield["lifespan"]))
+    ecs_world.add_component(shield_entity, CTagShield())
+    ServiceLocator.sounds_service.play(shield["sound"])
+    return shield_entity
 
 def create_player_bullet_square(ecs_world: esper.World, bullet: dict, player_pos: pygame.Vector2, player_size: pygame.Vector2):
     bullet_size = pygame.Vector2(bullet["size"]["w"], bullet["size"]["h"])
@@ -100,11 +117,13 @@ def create_input_player(ecs_world: esper.World):
     input_key_space = ecs_world.create_entity()
     pause_action = ecs_world.create_entity()
     quit_action = ecs_world.create_entity()
+    shield_action = ecs_world.create_entity()
     ecs_world.add_component(input_left, CInputCommand("PLAYER_LEFT", pygame.K_LEFT))
     ecs_world.add_component(input_right, CInputCommand("PLAYER_RIGHT", pygame.K_RIGHT))
     ecs_world.add_component(input_key_space, CInputCommand("PLAYER_FIRE", pygame.K_SPACE))
     ecs_world.add_component(pause_action, CInputCommand("PAUSE", pygame.K_p))
     ecs_world.add_component(quit_action, CInputCommand("QUIT_TO_MENU_AND_PLAYER_FIRE", pygame.K_z))
+    ecs_world.add_component(shield_action, CInputCommand("PLAYER_SHIELD", pygame.K_x))
 
 def create_menu_input(ecs_world: esper.World):
     start_game_action = ecs_world.create_entity()
