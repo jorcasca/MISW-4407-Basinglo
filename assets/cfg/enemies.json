@@ -94,5 +94,101 @@
                 }
             ]
         }
+    },
+    "Enemy05": {
+        "image": "assets/img/invaders_enemy_03.png",
+        "image_pivote": "assets/img/invaders_enemy_03_one.png",
+        "sound": "assets/snd/enemy_launch.ogg",
+        "score": 50,
+        "velocity": 60,
+        "animations": {
+            "number_frames": 5,
+            "list": [
+                {
+                    "name": "IDLE",
+                    "start": 0,
+                    "end": 0,
+                    "framerate": 1
+                },
+                {
+                    "name": "MOVE",
+                    "start": 0,
+                    "end": 4,
+                    "framerate": 5
+                }
+            ]
+        }
+    },
+    "Enemy06": {
+        "image": "assets/img/invaders_enemy_04.png",
+        "image_pivote": "assets/img/invaders_enemy_04_one.png",
+        "sound": "assets/snd/enemy_launch.ogg",
+        "velocity": 60,
+        "score": 70,
+        "animations": {
+            "number_frames": 1,
+            "list": [
+                {
+                    "name": "IDLE",
+                    "start": 0,
+                    "end": 0,
+                    "framerate": 1
+                },
+                {
+                    "name": "MOVE",
+                    "start": 0,
+                    "end": 0,
+                    "framerate": 5
+                }
+            ]
+        }
+    },
+    "Enemy07": {
+        "image": "assets/img/invaders_enemy_03.png",
+        "image_pivote": "assets/img/invaders_enemy_03_one.png",
+        "sound": "assets/snd/enemy_launch.ogg",
+        "score": 70,
+        "velocity": 80,
+        "animations": {
+            "number_frames": 5,
+            "list": [
+                {
+                    "name": "IDLE",
+                    "start": 0,
+                    "end": 0,
+                    "framerate": 1
+                },
+                {
+                    "name": "MOVE",
+                    "start": 0,
+                    "end": 4,
+                    "framerate": 5
+                }
+            ]
+        }
+    },
+    "Enemy08": {
+        "image": "assets/img/invaders_enemy_04.png",
+        "image_pivote": "assets/img/invaders_enemy_04_one.png",
+        "sound": "assets/snd/enemy_launch.ogg",
+        "velocity": 80,
+        "score": 90,
+        "animations": {
+            "number_frames": 1,
+            "list": [
+                {
+                    "name": "IDLE",
+                    "start": 0,
+                    "end": 0,
+                    "framerate": 1
+                },
+                {
+                    "name": "MOVE",
+                    "start": 0,
+                    "end": 0,
+                    "framerate": 5
+                }
+            ]
+        }
     }
 }

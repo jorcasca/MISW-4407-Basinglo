@@ -5,7 +5,7 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
-
+from src.ecs.components.tags.c_tag_high_score import CTagHighScore
 from src.ecs.components.tags.c_tag_score import CTagScore
 
 from src.engine.service_locator import ServiceLocator
@@ -14,6 +14,8 @@ from src.create.prefab_creator import create_explosion
 
 def system_collision_bullet_enemy(world: esper.World, interface: dict, explosion: dict):
     score_component = world.get_components(CSurface, CTagScore)
+    high_score_component = world.get_components(CSurface, CTagHighScore)
+
     enemy_components = world.get_components(CSurface, CTransform, CTagEnemy)
     bullet_components = world.get_components(CSurface, CTransform, CTagPlayerBullet)
     for bullet_entity, (c_s_b, c_t_b, _) in bullet_components:
@@ -31,4 +33,9 @@ def system_collision_bullet_enemy(world: esper.World, interface: dict, explosion
                         font=ServiceLocator.fonts_service.get(interface["score_value"]["font"], interface["score_value"]["font_size"]),
                         color=pygame.Color(interface["score_value"]["color"]["r"], interface["score_value"]["color"]["g"], interface["score_value"]["color"]["b"])  
                     )
-                    
+                    for _, (c_s_s2, _) in high_score_component:
+                        c_s_s2.update_text(
+                            text=str(ServiceLocator.globals_service.high_score),
+                            font=ServiceLocator.fonts_service.get(interface["high_score_value"]["font"], interface["high_score_value"]["font_size"]),
+                            color=pygame.Color(interface["high_score_value"]["color"]["r"], interface["high_score_value"]["color"]["g"], interface["high_score_value"]["color"]["b"])  
+                        )

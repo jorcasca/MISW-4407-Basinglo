@@ -14,7 +14,7 @@
     "enemy_spawn_events": [
         {
             "time": 0.0,
-            "enemy_type": "Enemy04",
+            "enemy_type": "Enemy08",
             "position": {
                 "x": 112,
                 "y": 40
@@ -22,7 +22,7 @@
         },
         {
             "time": 0.0,
-            "enemy_type": "Enemy04",
+            "enemy_type": "Enemy08",
             "position": {
                 "x": 160,
                 "y": 40
@@ -33,7 +33,7 @@
 
         {
             "time": 0.0,
-            "enemy_type": "Enemy03",
+            "enemy_type": "Enemy07",
             "position": {
                 "x": 96,
                 "y": 55
@@ -41,7 +41,7 @@
         },
         {
             "time": 0.0,
-            "enemy_type": "Enemy03",
+            "enemy_type": "Enemy07",
             "position": {
                 "x": 112,
                 "y": 55
@@ -49,7 +49,7 @@
         },
         {
             "time": 0.0,
-            "enemy_type": "Enemy03",
+            "enemy_type": "Enemy07",
             "position": {
                 "x": 128,
                 "y": 55
@@ -57,7 +57,7 @@
         },        
         {
             "time": 0.0,
-            "enemy_type": "Enemy03",
+            "enemy_type": "Enemy07",
             "position": {
                 "x": 144,
                 "y": 55
@@ -65,7 +65,7 @@
         },
         {
             "time": 0.0,
-            "enemy_type": "Enemy03",
+            "enemy_type": "Enemy07",
             "position": {
                 "x": 160,
                 "y": 55
@@ -73,7 +73,7 @@
         },
         {
             "time": 0.0,
-            "enemy_type": "Enemy03",
+            "enemy_type": "Enemy07",
             "position": {
                 "x": 176,
                 "y": 55

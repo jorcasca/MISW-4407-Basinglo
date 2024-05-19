@@ -12,7 +12,6 @@ from src.ecs.components.c_animation import CAnimation
 from src.ecs.components.c_enemy_state import CEnemyState
 from src.ecs.components.c_blink import CBlink
 from src.ecs.components.c_direction import CDirection
-from src.ecs.components.c_lifes import CLifes
 from src.ecs.components.c_game_status import CGameStatus
 from src.ecs.components.c_life_span import CLifeSpan
 from src.ecs.components.c_player_power import CPlayerPower
@@ -45,6 +44,9 @@ def create_sprite(ecs_world: esper.World, pos: pygame.Vector2, vel:pygame.Vector
     return sprite_entity
 
 def create_player_square(ecs_world: esper.World, player: dict, player_spawn: dict) -> int:
+    lifes = ServiceLocator.globals_service.lifes
+    if lifes == 0:
+        ServiceLocator.globals_service.set_lifes(player["lifes"])
     player_sprite = ServiceLocator.images_service.get(player["image"])
     player_entity = create_sprite(
          ecs_world = ecs_world,
@@ -53,7 +55,6 @@ def create_player_square(ecs_world: esper.World, player: dict, player_spawn: dic
          surface = player_sprite
     )
     ecs_world.add_component(player_entity, CTagPlayer())
-    ecs_world.add_component(player_entity, CLifes(player["lifes"]))
     ecs_world.add_component(player_entity, CDirection())
     ecs_world.add_component(player_entity, CPlayerPower(player["shield_recharge_duration"]))
     return player_entity

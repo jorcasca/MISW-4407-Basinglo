@@ -11,7 +11,6 @@ from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.c_blink import CBlink
 from src.ecs.components.c_life_span import CLifeSpan
-from src.ecs.components.c_lifes import CLifes
 from src.ecs.components.c_direction import CDirection, PlayerDirection
 from src.ecs.components.c_game_status import CGameStatus, GameStatus
 from src.ecs.components.c_player_power import CPlayerPower
@@ -19,6 +18,7 @@ from src.ecs.components.tags.c_tag_power import CTagPower
 
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.ecs.components.tags.c_tag_score import CTagScore
+from src.ecs.components.tags.c_tag_high_score import CTagHighScore
 
 from src.utils.load_config import load_window, load_enemies, load_player, load_bullet, load_explosion, load_interface, load_starfield, load_shield
 
@@ -69,21 +69,25 @@ class PlayScene(Scene):
 
     def do_create(self):
         ServiceLocator.sounds_service.play(self.level["settings"]["sound"])
+
         self._game_entity = create_game_status(self.ecs_world)
         self._game_c_s = self.ecs_world.component_for_entity(self._game_entity, CGameStatus)
+        score = ServiceLocator.globals_service.score
+        if score == 0:
+            score = "00"
 
         create_starfield(self.ecs_world, self.starfield, self.screen)
         draw_text(self.ecs_world, self.interface["1up"]["value"], self.interface["1up"]["font"], self.interface["1up"]["font_size"], self.interface["1up"]["color"], self.interface["1up"]["position"])
         draw_text(self.ecs_world, self.interface["high_score"]["value"], self.interface["high_score"]["font"], self.interface["high_score"]["font_size"], self.interface["high_score"]["color"], self.interface["high_score"]["position"])
-        draw_text(self.ecs_world, "00", self.interface["score_value"]["font"], self.interface["score_value"]["font_size"], self.interface["score_value"]["color"], self.interface["score_value"]["position"], CTagScore())
-        draw_text(self.ecs_world, self.interface["high_score_value"]["value"], self.interface["high_score_value"]["font"], self.interface["high_score_value"]["font_size"], self.interface["high_score_value"]["color"], self.interface["high_score_value"]["position"])
+        draw_text(self.ecs_world, str(score), self.interface["score_value"]["font"], self.interface["score_value"]["font_size"], self.interface["score_value"]["color"], self.interface["score_value"]["position"], CTagScore())
+        draw_text(self.ecs_world, str(ServiceLocator.globals_service.high_score), self.interface["high_score_value"]["font"], self.interface["high_score_value"]["font_size"], self.interface["high_score_value"]["color"], self.interface["high_score_value"]["position"], CTagHighScore())
         draw_text(self.ecs_world, self.level["settings"]["level"], self.interface["level_value"]["font"], self.interface["level_value"]["font_size"], self.interface["level_value"]["color"], self.interface["level_value"]["position"])
         draw_text(self.ecs_world, self.interface["power_title"]["value"], self.interface["power_title"]["font"], self.interface["power_title"]["font_size"], self.interface["power_title"]["color"], self.interface["power_title"]["position"])
         draw_text(self.ecs_world, self.interface["power_value"]["value"], self.interface["power_value"]["font"], self.interface["power_value"]["font_size"], self.interface["power_value"]["color_activated"], self.interface["power_value"]["position"], CTagPower())
 
         if self.level["settings"]["level"] == "01":
             draw_text(self.ecs_world, self.interface["game_start"]["value"], self.interface["game_start"]["font"], self.interface["game_start"]["font_size"], self.interface["game_start"]["color"], self.interface["game_start"]["position"], CLifeSpan(self.interface["game_start"]["lifespan"]))
-        elif self.level["settings"]["level"] == "02":
+        else:
             draw_text(self.ecs_world, self.interface["level_complete"]["value"], self.interface["level_complete"]["font"], self.interface["level_complete"]["font_size"], self.interface["level_complete"]["color"], self.interface["level_complete"]["position"], CLifeSpan(self.interface["level_complete"]["lifespan"]))
             draw_text(self.ecs_world, self.interface["next_level"]["value"], self.interface["next_level"]["font"], self.interface["next_level"]["font_size"], self.interface["next_level"]["color"], self.interface["next_level"]["position"], CLifeSpan(self.interface["next_level"]["lifespan"]))
 
@@ -95,7 +99,6 @@ class PlayScene(Scene):
         self._player_c_v = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
         self._player_c_t = self.ecs_world.component_for_entity(self._player_entity, CTransform)
         self._player_c_s = self.ecs_world.component_for_entity(self._player_entity, CSurface)
-        self._player_c_l = self.ecs_world.component_for_entity(self._player_entity, CLifes)
         self._player_c_d = self.ecs_world.component_for_entity(self._player_entity, CDirection)
         self._player_c_p = self.ecs_world.component_for_entity(self._player_entity, CPlayerPower)
 
@@ -110,7 +113,7 @@ class PlayScene(Scene):
 
     def do_update(self, delta_time: float):
         system_blink(self.ecs_world, delta_time)
-        system_star_bounds(self.ecs_world, self.screen, delta_time)
+        system_star_bounds(self.ecs_world, self.screen)
         system_explosion_kill(self.ecs_world)
 
         if self._game_c_s.status != GameStatus.PAUSE:
@@ -182,9 +185,12 @@ class PlayScene(Scene):
                     elif self._game_c_s.status == GameStatus.GAME_OVER:
                         self.switch_scene("MENU_SCENE")
 
-        if action.name == "PAUSE" and action.phase == CommandPhase.START and self._game_c_s.status != GameStatus.GAME_OVER:
+        if action.name == "PAUSE" and action.phase == CommandPhase.START and self._game_c_s.status != GameStatus.IDLE and self._game_c_s.status != GameStatus.GAME_OVER:
             if(self._game_c_s.status == GameStatus.PAUSE):
-                self._game_c_s.status = GameStatus.START
+                if self._player_c_s.visible:
+                    self._game_c_s.status = GameStatus.START
+                else:
+                    self._game_c_s.status = GameStatus.PLAYER_RESTART
             else:
                 self._game_c_s.status = GameStatus.PAUSE
             self.p_txt_s.visible = self._game_c_s.status == GameStatus.PAUSE
